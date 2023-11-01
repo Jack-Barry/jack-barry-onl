@@ -1,0 +1,44 @@
+{
+	"id": "about_page",
+	"label": "About Me",
+	"repeatable": false,
+	"hash": "4d61a4ebf7aac7484da6e4657dbaba54",
+	"status": true,
+	"format": "page",
+	"json": {
+		"Main": {
+			"page_content": {
+				"type": "StructuredText",
+				"config": {
+					"multi": "paragraph,preformatted,heading1,heading2,heading3,heading4,heading5,heading6,strong,em,hyperlink,image,embed,list-item,o-list-item,o-list-item",
+					"label": "Page Content"
+				}
+			},
+			"career": {
+				"type": "StructuredText",
+				"config": {
+					"label": "Career",
+					"placeholder": "",
+					"allowTargetBlank": true,
+					"multi": "paragraph,preformatted,heading1,heading2,heading3,heading4,heading5,heading6,strong,em,hyperlink,image,embed,list-item,o-list-item,rtl"
+				}
+			},
+			"personal": {
+				"type": "StructuredText",
+				"config": {
+					"label": "Personal",
+					"placeholder": "",
+					"allowTargetBlank": true,
+					"multi": "paragraph,preformatted,heading1,heading2,heading3,heading4,heading5,heading6,strong,em,hyperlink,image,embed,list-item,o-list-item,rtl"
+				}
+			},
+			"slices": {
+				"type": "Slices",
+				"fieldset": "Slice Zone",
+				"config": {
+					"choices": {}
+				}
+			}
+		}
+	}
+}

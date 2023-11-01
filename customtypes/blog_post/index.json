@@ -1,0 +1,84 @@
+{
+	"id": "blog_post",
+	"label": "Blog Post",
+	"repeatable": true,
+	"hash": "2707341ff7e6c5f37c1aa5fec0684bf9",
+	"status": true,
+	"format": "page",
+	"json": {
+		"Main": {
+			"uid": {
+				"type": "UID",
+				"config": {
+					"label": "uid"
+				}
+			},
+			"post_title": {
+				"type": "StructuredText",
+				"config": {
+					"single": "heading1",
+					"label": "Post Title"
+				}
+			},
+			"post_tldr": {
+				"type": "Text",
+				"config": {
+					"label": "post_tldr",
+					"placeholder": "Post TL;DR"
+				}
+			},
+			"body": {
+				"type": "Slices",
+				"fieldset": "Slice Zone",
+				"config": {
+					"choices": {
+						"blog_post": {
+							"type": "Slice",
+							"fieldset": "Blog Post",
+							"description": "Blog Post",
+							"icon": "note",
+							"display": "list",
+							"non-repeat": {
+								"title": {
+									"type": "StructuredText",
+									"config": {
+										"single": "heading1",
+										"label": "Title"
+									}
+								},
+								"tldr": {
+									"type": "Text",
+									"config": {
+										"label": "TL;DR"
+									}
+								},
+								"social_media_image1": {
+									"type": "Link",
+									"config": {
+										"select": "media",
+										"label": "Social Media Image"
+									}
+								}
+							},
+							"repeat": {
+								"content": {
+									"type": "StructuredText",
+									"config": {
+										"multi": "paragraph,preformatted,heading1,heading2,heading3,heading4,heading5,heading6,strong,em,hyperlink,image,embed,list-item,o-list-item,rtl",
+										"label": "Content"
+									}
+								}
+							}
+						},
+						"code_block": {
+							"type": "SharedSlice"
+						},
+						"blog_post_section": {
+							"type": "SharedSlice"
+						}
+					}
+				}
+			}
+		}
+	}
+}

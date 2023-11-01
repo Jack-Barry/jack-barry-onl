@@ -1,0 +1,30 @@
+{
+	"id": "home_page",
+	"label": "Home Page",
+	"repeatable": false,
+	"hash": "e064f14570bbf45db54af50e8ec84a35",
+	"status": true,
+	"format": "page",
+	"json": {
+		"Main": {
+			"welcome_message": {
+				"type": "StructuredText",
+				"config": {
+					"multi": "heading1,heading2",
+					"label": "Welcome Message"
+				}
+			},
+			"slices": {
+				"type": "Slices",
+				"fieldset": "Slice Zone",
+				"config": {
+					"choices": {
+						"rich_text_card": {
+							"type": "SharedSlice"
+						}
+					}
+				}
+			}
+		}
+	}
+}
