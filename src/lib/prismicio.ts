@@ -1,5 +1,7 @@
 import * as prismic from '@prismicio/client';
-import { CreateClientConfig, enableAutoPreviews } from '@prismicio/svelte/kit';
+import { enableAutoPreviews } from '@prismicio/svelte/kit';
+import type { CreateClientConfig } from '@prismicio/svelte/kit';
+import { PRISMIC_ACCESS_TOKEN } from '$env/static/private';
 import config from '../../slicemachine.config.json';
 
 /**
@@ -33,6 +35,7 @@ const routes: prismic.ClientConfig['routes'] = [
  */
 export const createClient = ({ cookies, ...config }: CreateClientConfig = {}) => {
 	const client = prismic.createClient(repositoryName, {
+		accessToken: PRISMIC_ACCESS_TOKEN,
 		routes,
 		...config
 	});
