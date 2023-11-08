@@ -1,0 +1,12 @@
+[data-slice-type='code_block'] > div {
+	border-radius: $border-radius-lg;
+}
+#bmc-wbtn {
+	height: 48px !important;
+	width: 48px !important;
+
+	img {
+		height: 36px !important;
+		width: 36px !important;
+	}
+}

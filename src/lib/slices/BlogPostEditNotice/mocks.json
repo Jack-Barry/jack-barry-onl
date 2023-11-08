@@ -1,0 +1,25 @@
+[
+	{
+		"__TYPE__": "SharedSliceContent",
+		"variation": "default",
+		"primary": {
+			"edit_time": {
+				"__TYPE__": "FieldContent",
+				"type": "Timestamp",
+				"value": "2023-03-22T17:04:02Z"
+			},
+			"edit_notes": {
+				"__TYPE__": "StructuredTextContent",
+				"value": [
+					{
+						"type": "paragraph",
+						"content": {
+							"text": "Ipsum reprehenderit ullamco excepteur eu mollit. Non do Lorem sit in velit elit consequat reprehenderit veniam proident quis dolor."
+						}
+					}
+				]
+			}
+		},
+		"items": []
+	}
+]

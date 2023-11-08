@@ -1,23 +1,13 @@
-import { createClient } from '$lib/prismicio';
+export const prerender = false;
 
-export const prerender = true;
-
-export async function load() {
-	const client = createClient();
-
-	const blogPosts = await client.getByType('blog_post', {
-		orderings: {
-			field: 'document.first_publication_date',
-			direction: 'desc'
-		},
-		pageSize: 10
-	});
+export async function load({ parent }) {
+	const { tags } = await parent();
 
 	return {
 		breadcrumbs: [
 			{ label: 'Home', href: '/home' },
 			{ label: 'Blog', href: '/blog' }
 		],
-		blogPosts
+		tags
 	};
 }

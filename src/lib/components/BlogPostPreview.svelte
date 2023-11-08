@@ -1,10 +1,17 @@
 <script lang="ts">
+	import ArrowRight from 'bootstrap-icons/icons/arrow-right.svg?component';
 	import NewsSvg from 'bootstrap-icons/icons/newspaper.svg?component';
 	import type { BlogPostDocument } from '../../prismicio-types';
 	import { formattedDate } from '$lib/utils/dates';
+	import TagsList from './TagsList.svelte';
 
 	export let post: BlogPostDocument;
 	export let withIcon: boolean = false;
+	export let activeTags: string[] = [];
+	export let onTagClick: (tag: {
+		tag: string;
+		active?: boolean;
+	}) => void | Promise<void> = () => {};
 </script>
 
 <div class="card w-100 position-relative shadow-sm">
@@ -17,11 +24,20 @@
 		</span>
 	{/if}
 	<div class="card-body">
-		<!-- <h5 class="card-title">{post.data.title}</h5> -->
+		<div class="mb-1">
+			<TagsList
+				tags={post.tags.map((tag) => ({ tag, active: activeTags.includes(tag) }))}
+				onClick={onTagClick}
+			/>
+		</div>
+		<h5 class="card-title">{post.data.meta_title}</h5>
 		<p class="mb-0">{formattedDate(post.first_publication_date, { condensed: true })}</p>
-		<!-- <p class="mb-0 text-truncate">{post.data.meta_description}</p> -->
+		<p class="mb-0">{post.data.meta_description}</p>
 		<div class="text-end">
-			<a href={`/blog/${post.uid}`}>Read more</a>
+			<a href={`/blog/${post.uid}`} class="icon-link icon-link-hover"
+				>Read more
+				<ArrowRight />
+			</a>
 		</div>
 	</div>
 </div>

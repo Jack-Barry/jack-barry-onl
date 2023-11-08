@@ -1,7 +1,7 @@
 {
 	"id": "blog_post_section",
 	"type": "SharedSlice",
-	"name": "BlogPostSection",
+	"name": "BlogPostContentSection",
 	"description": "BlogPostSection",
 	"variations": [
 		{

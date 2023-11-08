@@ -13,62 +13,16 @@
 					"label": "uid"
 				}
 			},
-			"post_title": {
-				"type": "StructuredText",
-				"config": {
-					"single": "heading1",
-					"label": "Post Title"
-				}
-			},
-			"post_tldr": {
-				"type": "Text",
-				"config": {
-					"label": "post_tldr",
-					"placeholder": "Post TL;DR"
-				}
-			},
 			"body": {
 				"type": "Slices",
 				"fieldset": "Slice Zone",
 				"config": {
 					"choices": {
-						"blog_post": {
-							"type": "Slice",
-							"fieldset": "Blog Post",
-							"description": "Blog Post",
-							"icon": "note",
-							"display": "list",
-							"non-repeat": {
-								"title": {
-									"type": "StructuredText",
-									"config": {
-										"single": "heading1",
-										"label": "Title"
-									}
-								},
-								"tldr": {
-									"type": "Text",
-									"config": {
-										"label": "TL;DR"
-									}
-								},
-								"social_media_image1": {
-									"type": "Link",
-									"config": {
-										"select": "media",
-										"label": "Social Media Image"
-									}
-								}
-							},
-							"repeat": {
-								"content": {
-									"type": "StructuredText",
-									"config": {
-										"multi": "paragraph,preformatted,heading1,heading2,heading3,heading4,heading5,heading6,strong,em,hyperlink,image,embed,list-item,o-list-item,rtl",
-										"label": "Content"
-									}
-								}
-							}
+						"blog_post_image": {
+							"type": "SharedSlice"
+						},
+						"edit_notice": {
+							"type": "SharedSlice"
 						},
 						"code_block": {
 							"type": "SharedSlice"
@@ -78,6 +32,33 @@
 						}
 					}
 				}
+			}
+		},
+		"SEO & Metadata": {
+			"meta_title": {
+				"config": {
+					"label": "Meta Title",
+					"placeholder": "A title of the page used for social media and search engines"
+				},
+				"type": "Text"
+			},
+			"meta_description": {
+				"config": {
+					"label": "Meta Description",
+					"placeholder": "A brief summary of the page"
+				},
+				"type": "Text"
+			},
+			"meta_image": {
+				"config": {
+					"constraint": {
+						"height": 1260,
+						"width": 2400
+					},
+					"label": "Meta Image",
+					"thumbnails": []
+				},
+				"type": "Image"
 			}
 		}
 	}

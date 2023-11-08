@@ -1,0 +1,30 @@
+[
+	{
+		"__TYPE__": "SharedSliceContent",
+		"variation": "default",
+		"primary": {
+			"language": {
+				"__TYPE__": "FieldContent",
+				"value": "powershell",
+				"type": "Select"
+			},
+			"code": {
+				"__TYPE__": "StructuredTextContent",
+				"value": [
+					{
+						"type": "paragraph",
+						"content": {
+							"text": "Laborum dolore irure in proident incididunt officia amet esse in cupidatat mollit."
+						}
+					}
+				]
+			}
+		},
+		"items": [
+			{
+				"__TYPE__": "GroupItemContent",
+				"value": []
+			}
+		]
+	}
+]

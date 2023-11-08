@@ -1,0 +1,18 @@
+$utilities: map-merge(
+	$utilities,
+	(
+		'font-size':
+			map-merge(
+				map-get($utilities, 'font-size'),
+				(
+					values:
+						map-merge(
+							map-get(map-get($utilities, 'font-size'), 'values'),
+							(
+								'fine-print': $font-size-base * 0.75
+							)
+						)
+				)
+			)
+	)
+);

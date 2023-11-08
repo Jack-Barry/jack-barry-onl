@@ -12,7 +12,7 @@
 </svelte:head>
 
 <div class="animate__animated animate__pulse animate__delay-1s">
-	<BlogPostPreview post={data.latestPost} withIcon />
+	<BlogPostPreview post={data.latestPost} withIcon activeTags={data.tags} />
 </div>
 <div class="mt-3 d-flex justify-content-end">
 	<a class="icon-link icon-link-hover" href="/blog">

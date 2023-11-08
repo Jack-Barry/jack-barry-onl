@@ -22,7 +22,7 @@ $utilities: map-merge(
 						map-merge(
 							map-get(map-get($utilities, 'max-width'), 'values'),
 							(
-								main-content: map-get($grid-breakpoints, 'md')
+								main-content: map-get($grid-breakpoints, 'lg')
 							)
 						)
 				)
