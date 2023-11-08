@@ -1,7 +1,7 @@
 import { browser } from '$app/environment';
 import { QueryClient } from '@tanstack/svelte-query';
 
-export const prerender = false;
+export const prerender = true;
 
 export const load = async ({ url }) => {
 	const queryClient = new QueryClient({
@@ -9,9 +9,6 @@ export const load = async ({ url }) => {
 			queries: {
 				enabled: browser,
 				staleTime: Infinity
-				// refetchOnWindowFocus: false,
-				// refetchOnMount: false,
-				// refetchOnReconnect: false
 			}
 		}
 	});
