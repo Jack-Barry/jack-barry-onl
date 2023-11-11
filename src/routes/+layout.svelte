@@ -8,7 +8,7 @@
 
 	import { browser } from '$app/environment';
 	import { page } from '$app/stores';
-	// import HeapAnalytics from '$lib/components/heap/HeapAnalytics.svelte';
+	import HeapAnalytics from '$lib/analytics/HeapAnalytics.svelte';
 	import AppFooter from '$lib/components/layout/AppFooter.svelte';
 	import Breadcrumbs from '$lib/components/layout/Navbar.svelte';
 	import LoadingSpinner from '$lib/components/LoadingSpinner.svelte';
@@ -24,7 +24,7 @@
 </script>
 
 <svelte:head>
-	<!-- <HeapAnalytics /> -->
+	<HeapAnalytics />
 	<!-- 	{@html solarizedLight} -->
 	{@html nightOwl}
 </svelte:head>

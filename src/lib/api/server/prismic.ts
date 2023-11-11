@@ -72,7 +72,7 @@ async function getBlogPosts(
 	}
 
 	return await client.getByType('blog_post', {
-		pageSize: 1,
+		pageSize: 10,
 		page,
 		filters,
 		graphQuery

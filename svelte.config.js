@@ -11,7 +11,18 @@ const config = {
 		// adapter-auto only supports some environments, see https://kit.svelte.dev/docs/adapter-auto for a list.
 		// If your environment is not supported or you settled on a specific environment, switch out the adapter.
 		// See https://kit.svelte.dev/docs/adapters for more information about adapters.
-		adapter: adapter()
+		adapter: adapter(),
+		csp: {
+			directives: {
+				'default-src': ['self'],
+				'script-src': ['self', 'https://cdn.heapanalytics.com', 'https://heapanalytics.com', 'unsafe-inline', 'unsafe-eval'],
+				'img-src': ['self', 'data:', 'https://heapanalytics.com', 'https://images.prismic.io'],
+				'style-src': ['self', 'https://fonts.googleapis.com', 'https://heapanalytics.com', 'unsafe-inline'],
+				'font-src': ['self', 'https://fonts.gstatic.com', 'https://heapanalytics.com', 'https://*.auryc.com'],
+				'connect-src': ['self', 'https://heapanalytics.com', 'https://*.auryc.com'],
+				'worker-src': ['self', 'blob:']
+			}
+		}
 	}
 };
 

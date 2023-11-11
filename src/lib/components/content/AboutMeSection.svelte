@@ -11,7 +11,6 @@
 	const accordionId = 'aboutMeAccordion';
 </script>
 
-<LoadingEllipsis />
 <h2>About me</h2>
 <div class="accordion mb-5" id={accordionId}>
 	<AccordionItem parentId={accordionId} id="accordion-item-career" title="Career">
