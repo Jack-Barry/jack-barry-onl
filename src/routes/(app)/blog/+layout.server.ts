@@ -1,13 +1,13 @@
-export const prerender = false;
+export const prerender = true;
 
 export async function load({ parent }) {
-	const { tags } = await parent();
+	const { allTags } = await parent();
 
 	return {
 		breadcrumbs: [
 			{ label: 'Home', href: '/home' },
 			{ label: 'Blog', href: '/blog' }
 		],
-		tags
+		allTags
 	};
 }

@@ -1,17 +1,9 @@
-import { createClient } from '$lib/prismicio.js';
+import { apiPrismic } from '$lib/api/server/prismic.js';
+
+export const prerender = true;
 
 export const load = async ({ fetch }) => {
-	const prismicClient = createClient({ fetch });
-	const tags = await prismicClient.getTags();
+	const allTags = await apiPrismic({ fetch }).tags.get();
 
-	return {
-		// temporary workaround since tags cannot currently be deleted in Primsic
-		tags: tags.filter(
-			(tag) =>
-				tag.startsWith('Language:') ||
-				tag.startsWith('Skills:') ||
-				tag === 'Home Life' ||
-				tag === 'Home Server & Network'
-		)
-	};
+	return { allTags };
 };

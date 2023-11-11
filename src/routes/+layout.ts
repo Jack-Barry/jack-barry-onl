@@ -1,9 +1,9 @@
-import { browser } from '$app/environment';
 import { QueryClient } from '@tanstack/svelte-query';
+import { browser } from '$app/environment';
 
 export const prerender = true;
 
-export const load = async ({ url }) => {
+export const load = async () => {
 	const queryClient = new QueryClient({
 		defaultOptions: {
 			queries: {
@@ -13,5 +13,5 @@ export const load = async ({ url }) => {
 		}
 	});
 
-	return { pathname: url.pathname, queryClient };
+	return { queryClient };
 };

@@ -1,5 +1,5 @@
 <script lang="ts">
-	type TagObject = { tag: string; active?: boolean };
+	type TagObject = { tag: string; selected?: boolean };
 	export let tags: TagObject[];
 	export let onClick: (tag: TagObject) => void | Promise<void> = () => {};
 </script>
@@ -8,8 +8,8 @@
 	{#each tags.sort((a, b) => a.tag.localeCompare(b.tag)) as tag}
 		<button
 			class="btn btn-sm"
-			class:btn-primary={tag.active}
-			class:btn-outline-primary={!tag.active}
+			class:btn-primary={tag.selected}
+			class:btn-outline-primary={!tag.selected}
 			on:click={() => {
 				onClick(tag);
 			}}>{tag.tag}</button

@@ -1,31 +1,29 @@
-import { createClient } from '$lib/prismicio.js';
+import { apiPrismic } from '$lib/api/server/prismic.js';
 import type { EntryGenerator } from './$types.js';
 
-// TODO: should prerender individual blog posts
 export const prerender = true;
-// export const csr = false;
 
-export async function load({ params, fetch }) {
-	const prismicClient = createClient({ fetch });
-	const blogPost = await prismicClient.getByUID('blog_post', params.uid);
-
-	return {
-		breadcrumbs: [
-			{ label: 'Home', href: '/home' },
-			{ label: 'Blog', href: '/blog' },
-			{ label: blogPost.data.meta_title, href: `/blog/${params.uid}` }
-		],
-		blogPost
-	};
-}
-
-const graphQuery = `{
+const entriesGraphQuery = `{
 	blog_post {
 		uid
 	}
 }`;
 export const entries: EntryGenerator = async () => {
-	const allPosts = await createClient().getAllByType('blog_post', { graphQuery });
+	const allPosts = await apiPrismic({ fetch }).blogPosts.getAll({ graphQuery: entriesGraphQuery });
 
 	return allPosts.map((p) => ({ uid: p.uid }));
 };
+
+export async function load({ params, fetch, parent }) {
+	const blogPost = await apiPrismic({ fetch }).blogPosts.getByUid(params.uid);
+
+	const { breadcrumbs } = await parent()
+	return {
+		breadcrumbs: [
+			...breadcrumbs,
+			{ label: 'Post', href: `/blog/${params.uid}` }
+		],
+		blogPost
+	};
+}
+

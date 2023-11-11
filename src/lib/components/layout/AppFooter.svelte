@@ -6,6 +6,8 @@
 	import RedditSvg from 'bootstrap-icons/icons/reddit.svg?component';
 	import StackOverflowSvg from 'bootstrap-icons/icons/stack-overflow.svg?component';
 	import SocialLink from './SocialLink.svelte';
+	import { page } from '$app/stores';
+	import { scale } from 'svelte/transition';
 
 	let socialIcons = [
 		{ Icon: LinkedinSvg, href: 'https://www.linkedin.com/in/jackbarryonl/' },
@@ -14,21 +16,24 @@
 		{ Icon: DiscordSvg, href: 'https://discordapp.com/users/1084591417680199730' },
 		{ Icon: RedditSvg, href: 'https://www.reddit.com/user/JackBarryOnl' }
 	];
+	$: isLandingPage = $page.route.id === '/';
 </script>
 
 <!-- Padding to account for fixed footer -->
 <div class="py-5" />
-<div class="pt-4 bg-body shadow vw-100 fixed-bottom">
+<div class="bg-body shadow vw-100 fixed-bottom" class:pt-4={!isLandingPage}>
 	<div class="d-flex flex-column align-items-center gap-1">
-		<div class="mx-3 mx-sm-auto d-flex gap-2 align-items-center">
-			<ul class="list-unstyled d-flex gap-5 mb-0 flex-wrap align-items-center">
-				{#each socialIcons as socialIcon}
-					<li>
-						<SocialLink href={socialIcon.href} Icon={socialIcon.Icon} />
-					</li>
-				{/each}
-			</ul>
-		</div>
+		{#if !isLandingPage}
+			<div transition:scale class="mx-3 mx-sm-auto d-flex gap-2 align-items-center">
+				<ul class="list-unstyled d-flex gap-5 mb-0 flex-wrap align-items-center">
+					{#each socialIcons as socialIcon}
+						<li>
+							<SocialLink href={socialIcon.href} Icon={socialIcon.Icon} />
+						</li>
+					{/each}
+				</ul>
+			</div>
+		{/if}
 		<div class="mb-1 d-flex align-items-center fs-fine-print">
 			<CopyrightSvg transform="scale(0.6)" />
 			<span>{new Date().getFullYear()} All rights reserved.</span>

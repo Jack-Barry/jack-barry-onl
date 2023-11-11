@@ -1,24 +1,17 @@
-import { createClient } from '$lib/prismicio.js';
+import { apiPrismic } from '$lib/api/server/prismic.js';
 
 export const prerender = true;
-export const csr = true;
 
 export async function load({ fetch, parent }) {
-	const { tags } = await parent();
-	const prismicClient = createClient({ fetch });
-
-	const latestPost = await prismicClient.getSingle('blog_post', {
-		orderings: {
-			field: 'document.first_publication_date',
-			direction: 'desc'
-		}
-	});
-	const aboutMe = await prismicClient.getSingle('about_page');
+	const { allTags } = await parent();
+	const api = apiPrismic({ fetch });
+	const latestPost = await api.blogPosts.getLatest();
+	const aboutPage = await api.aboutPage.get();
 
 	return {
 		breadcrumbs: [{ label: 'Home', href: '/home' }],
-		tags,
+		allTags,
 		latestPost,
-		aboutMe
+		aboutPage
 	};
 }

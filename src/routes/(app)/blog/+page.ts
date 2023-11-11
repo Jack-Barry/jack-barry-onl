@@ -1,19 +1,18 @@
-import { blogPosts, type GetPostsOptions } from '$lib/api/prismic/blogPosts.js';
+import { queryKeys } from '$lib/api/client/queryKeys.js';
+import { fetchJson } from '$lib/utils/fetch.js';
 
-let hasPrefetched = false;
+export const prerender = true;
 
 export const load = async ({ data, parent, fetch }) => {
 	const { queryClient } = await parent();
 
-	if (!hasPrefetched) {
-		const { queryKeys, invoke } = blogPosts.getPosts;
-		const initialDataOptions: GetPostsOptions = { searchTerm: '', tags: [] };
-		await queryClient.prefetchQuery({
-			queryKey: queryKeys.forOptions(initialDataOptions),
-			queryFn: async () => await invoke(fetch, initialDataOptions)
-		});
-		hasPrefetched = true;
-	}
+	await queryClient.prefetchInfiniteQuery({
+		initialPageParam: 1,
+		queryKey: queryKeys.prismic.blog_post.infinite({}),
+		async queryFn() {
+			return await fetchJson(fetch, '/api/prismic/blog_post?page=1');
+		}
+	});
 
 	return data;
 };

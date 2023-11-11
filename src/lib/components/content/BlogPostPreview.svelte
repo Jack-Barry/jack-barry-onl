@@ -1,8 +1,9 @@
 <script lang="ts">
 	import ArrowRight from 'bootstrap-icons/icons/arrow-right.svg?component';
 	import NewsSvg from 'bootstrap-icons/icons/newspaper.svg?component';
-	import type { BlogPostDocument } from '../../prismicio-types';
 	import { formattedDate } from '$lib/utils/dates';
+
+	import type { BlogPostDocument } from '../../../prismicio-types';
 	import TagsList from './TagsList.svelte';
 
 	export let post: BlogPostDocument;
@@ -26,7 +27,7 @@
 	<div class="card-body">
 		<div class="mb-1">
 			<TagsList
-				tags={post.tags.map((tag) => ({ tag, active: activeTags.includes(tag) }))}
+				tags={post.tags.map((tag) => ({ tag, selected: activeTags.includes(tag) }))}
 				onClick={onTagClick}
 			/>
 		</div>

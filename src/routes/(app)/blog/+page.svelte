@@ -1,71 +1,67 @@
 <script lang="ts">
+	import EnableAllIcon from 'bootstrap-icons/icons/check-circle-fill.svg?component';
 	import FilterIcon from 'bootstrap-icons/icons/funnel-fill.svg?component';
 	import ClearIcon from 'bootstrap-icons/icons/x-circle-fill.svg?component';
-	import EnableAllIcon from 'bootstrap-icons/icons/check-circle-fill.svg?component';
-	import { scale } from 'svelte/transition';
-	import BlogPostPreview from '$lib/components/BlogPostPreview.svelte';
-	import TagsList from '$lib/components/TagsList.svelte';
-	import { blogPosts } from '$lib/api/prismic/blogPosts.js';
-	import { createQuery } from '@tanstack/svelte-query';
+	import { derived, writable } from 'svelte/store';
+	import { scale, fly } from 'svelte/transition';
+
+	import { infiniteQueryBlogPosts } from '$lib/api/client/prismic';
+	import BlogPostPreview from '$lib/components/content/BlogPostPreview.svelte';
+	import TagsList from '$lib/components/content/TagsList.svelte';
 	import LoadingSpinner from '$lib/components/LoadingSpinner.svelte';
+	import { useDebouncedInput } from '$lib/utils/debounce.js';
+	import LoadingEllipsis from '$lib/components/LoadingEllipsis.svelte';
+	import TransitionContainer from '$lib/components/layout/TransitionContainer.svelte';
 
 	export let data;
-	let showFilter = false;
+
+	const { queryOptions, query } = infiniteQueryBlogPosts();
+	const filtersActive = derived(queryOptions, ($queryOptions) => {
+		return !!($queryOptions.searchTerm?.length || $queryOptions.tags?.length);
+	});
+
+	const showFilter = writable(false);
 	function toggleShowFilter() {
-		showFilter = !showFilter;
+		showFilter.update((prev) => !prev);
 	}
 
-	let searchTerm = '';
+	const { debouncedInputValue: debouncedSearchTerm, liveInputValue: liveSearchTerm } =
+		useDebouncedInput();
 
-	const tagsMap = data.tags.map((tag) => ({ tag, active: true }));
+	const tags = writable(data.allTags.map((t) => ({ tag: t, selected: false })));
+	const ratioTagsSelected = writable(1);
 
 	function toggleTag(tag: string) {
-		const matchingTagIndex = tagsMap.findIndex((t) => t.tag === tag);
-		if (matchingTagIndex > -1) {
-			tagsMap[matchingTagIndex].active = !tagsMap[matchingTagIndex].active;
-		}
+		tags.update((prev) =>
+			prev.map((t) => {
+				if (t.tag !== tag) {
+					return t;
+				}
+
+				return { ...t, selected: !t.selected };
+			})
+		);
 	}
 
-	function toggleAllTags(active: boolean) {
-		for (let i = 0; i < tagsMap.length; i++) {
-			tagsMap[i].active = active;
-		}
+	function toggleAllTags(selected: boolean) {
+		tags.update((prev) => prev.map((t) => ({ ...t, selected })));
 	}
 
-	let debouncedSearchTerm = '';
-	let searchTimeout: NodeJS.Timeout;
-	function handleSearch(event: Event & { currentTarget: EventTarget & HTMLInputElement }) {
-		if (searchTimeout) {
-			clearTimeout(searchTimeout);
-		}
-
-		searchTimeout = setTimeout(() => {
-			debouncedSearchTerm = (event.target as { value?: string })?.value ?? '';
-		}, 300);
-	}
-
-	let activeTags: string[] = [];
-	$: allTagsEnabled = tagsMap.every((t) => t.active);
-	$: noTagsEnabled = !tagsMap.some((t) => t.active);
-	$: filtersActive = !(allTagsEnabled || noTagsEnabled) || !!searchTerm.length;
 	$: {
-		activeTags = tagsMap.reduce<string[]>((result, current) => {
-			if (current.active) {
-				result.push(current.tag);
-			}
-			return result;
-		}, []);
+		queryOptions.update((prev) => ({ ...prev, searchTerm: $debouncedSearchTerm }));
+	}
+	$: {
+		const selectedTags = $tags.filter((t) => t.selected).map((t) => t.tag);
+		ratioTagsSelected.set(selectedTags.length / data.allTags.length);
+		if (!selectedTags.length || selectedTags.length === data.allTags.length) {
+			// if all or none are selected, tag filtering is irrelevant
+			queryOptions.update((prev) => ({ ...prev, tags: undefined }));
+		} else {
+			queryOptions.update((prev) => ({ ...prev, tags: selectedTags }));
+		}
 	}
 
-	const { queryKeys, invoke } = blogPosts.getPosts;
-	$: options = {
-		tags: activeTags.length === data.tags.length ? [] : activeTags,
-		searchTerm: debouncedSearchTerm
-	};
-	$: filteredPosts = createQuery({
-		queryKey: queryKeys.forOptions(options),
-		queryFn: async () => await invoke(fetch, options)
-	});
+	$: visiblySelectedTags = $queryOptions.tags || $ratioTagsSelected ? data.allTags : [];
 </script>
 
 <svelte:head>
@@ -82,8 +78,8 @@
 			on:click={toggleShowFilter}
 		>
 			<FilterIcon />
-			{showFilter ? 'Hide' : 'Show'} filters
-			{#if filtersActive}
+			{$showFilter ? 'Hide' : 'Show'} filters
+			{#if $filtersActive}
 				<span
 					class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle"
 				>
@@ -91,15 +87,15 @@
 				</span>
 			{/if}
 		</button>
-		{#if showFilter}
+		{#if $showFilter}
 			<button
 				transition:scale
 				type="button"
 				class="btn btn-outline-danger order-sm-first"
-				disabled={!filtersActive}
+				disabled={!$filtersActive}
 				on:click={() => {
-					searchTerm = '';
-					toggleAllTags(true);
+					liveSearchTerm.set('');
+					toggleAllTags(false);
 				}}
 			>
 				<ClearIcon /> Clear all filters
@@ -107,7 +103,7 @@
 		{/if}
 	</div>
 </div>
-{#if showFilter}
+{#if $showFilter}
 	<div transition:scale class="mb-3">
 		<div class="form-floating mb-3">
 			<input
@@ -115,8 +111,7 @@
 				class="form-control"
 				id="searchInput"
 				placeholder="Search"
-				bind:value={searchTerm}
-				on:input={handleSearch}
+				bind:value={$liveSearchTerm}
 			/>
 			<label for="floatingInput">Search</label>
 		</div>
@@ -125,7 +120,7 @@
 			<div class="d-flex align-items-start gap-2 flex-column flex-sm-row">
 				<div>
 					<TagsList
-						tags={tagsMap}
+						tags={$tags}
 						onClick={(tag) => {
 							toggleTag(tag.tag);
 						}}
@@ -136,7 +131,7 @@
 						<button
 							type="button"
 							class="btn btn-outline-success btn-sm text-nowrap"
-							disabled={allTagsEnabled}
+							disabled={$ratioTagsSelected === 1}
 							on:click={() => {
 								toggleAllTags(true);
 							}}
@@ -148,7 +143,7 @@
 						<button
 							type="button"
 							class="btn btn-outline-danger btn-sm text-nowrap"
-							disabled={noTagsEnabled}
+							disabled={$ratioTagsSelected === 0}
 							on:click={() => {
 								toggleAllTags(false);
 							}}
@@ -162,24 +157,47 @@
 	</div>
 	<hr />
 {/if}
-<div class="d-flex gap-3 flex-column pb-3">
-	{#if $filteredPosts.isLoading}
-		<div class="w-100 d-flex justify-content-center mt-5">
-			<LoadingSpinner size="3rem" />
-		</div>
-	{:else if $filteredPosts.error}
-		<div>{JSON.stringify($filteredPosts.error)}</div>
-	{:else if $filteredPosts.data?.results.length}
-		{#each $filteredPosts.data?.results || [] as post}
-			<BlogPostPreview
-				{post}
-				{activeTags}
-				onTagClick={(t) => {
-					toggleTag(t.tag);
-				}}
-			/>
-		{/each}
-	{:else}
-		<div class="alert alert-warning" role="alert">No posts match the current filters</div>
-	{/if}
-</div>
+<TransitionContainer>
+	<div class="d-flex gap-3 flex-column pb-3">
+		{#if $query.isLoading}
+			<div class="w-100 d-flex justify-content-center mt-5">
+				<LoadingSpinner size="3rem" />
+			</div>
+		{:else if $query.error}
+			<div>{JSON.stringify($query.error.message)}</div>
+		{:else if $query.data?.pages.length && $query.data.pages[0].results.length}
+			<div transition:fly class="d-flex flex-column gap-3">
+				{#each $query.data.pages as page}
+					{#each page.results || [] as post}
+						<BlogPostPreview
+							{post}
+							activeTags={visiblySelectedTags}
+							onTagClick={(t) => {
+								toggleTag(t.tag);
+							}}
+						/>
+					{/each}
+				{/each}
+				<button
+					class="btn btn-outline-primary"
+					on:click={() => {
+						$query.fetchNextPage();
+					}}
+					disabled={!$query.hasNextPage || $query.isFetchingNextPage}
+				>
+					{#if $query.isFetchingNextPage}
+						Loading more<LoadingEllipsis />
+					{:else if $query.hasNextPage}
+						Load More
+					{:else}
+						All posts{$filtersActive ? ' matching current filters' : ''} have been loaded
+					{/if}
+				</button>
+			</div>
+		{:else}
+			<div transition:fly class="alert alert-warning" role="alert">
+				No posts match the current filters
+			</div>
+		{/if}
+	</div>
+</TransitionContainer>

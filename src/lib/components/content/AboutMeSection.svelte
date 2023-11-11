@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { PrismicRichText } from '@prismicio/svelte';
-	import type { AboutPageDocument } from '../../prismicio-types';
-	import AccordionItem from './bootstrap/AccordionItem.svelte';
-	import Image from './prismic/Image.svelte';
+	import type { AboutPageDocument } from '../../../prismicio-types';
+	import AccordionItem from '../bootstrap/AccordionItem.svelte';
+	import Image from '../prismic/Image.svelte';
 
 	export let aboutMe: AboutPageDocument;
 	const accordionId = 'aboutMeAccordion';
