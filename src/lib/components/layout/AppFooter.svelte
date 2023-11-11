@@ -5,9 +5,10 @@
 	import LinkedinSvg from 'bootstrap-icons/icons/linkedin.svg?component';
 	import RedditSvg from 'bootstrap-icons/icons/reddit.svg?component';
 	import StackOverflowSvg from 'bootstrap-icons/icons/stack-overflow.svg?component';
-	import SocialLink from './SocialLink.svelte';
-	import { page } from '$app/stores';
 	import { scale } from 'svelte/transition';
+
+	import { page } from '$app/stores';
+	import SocialLink from './SocialLink.svelte';
 
 	let socialIcons = [
 		{ Icon: LinkedinSvg, href: 'https://www.linkedin.com/in/jackbarryonl/' },

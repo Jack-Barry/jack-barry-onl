@@ -1,17 +1,13 @@
+import { GRAPH_QUERIES_PRISMIC } from '$lib/api/common/prismic.js';
 import { apiPrismic } from '$lib/api/server/prismic.js';
 import type { EntryGenerator } from './$types.js';
 
 export const prerender = true;
 
-const entriesGraphQuery = `{
-	blog_post {
-		uid
-	}
-}`;
 export const entries: EntryGenerator = async () => {
-	const allPosts = await apiPrismic({ fetch }).blogPosts.getAll({ graphQuery: entriesGraphQuery });
+	const allPosts = await apiPrismic({ fetch }).blogPosts.getAll({ graphQuery: GRAPH_QUERIES_PRISMIC.GET_BLOG_POSTS.ENTRIES });
 
-	return allPosts.map((p) => ({ uid: p.uid }));
+	return allPosts.map(({ uid }) => ({ uid }));
 };
 
 export async function load({ params, fetch, parent }) {

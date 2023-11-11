@@ -1,17 +1,17 @@
 <script>
 	import { QueryClientProvider } from '@tanstack/svelte-query';
 	import { SvelteQueryDevtools } from '@tanstack/svelte-query-devtools';
-	import { blur, scale } from 'svelte/transition';
+	import { blur } from 'svelte/transition';
 	// code snippet styles
 	import nightOwl from 'svelte-highlight/styles/night-owl';
 	// import solarizedLight from 'svelte-highlight/styles/solarized-light';
 
 	import { browser } from '$app/environment';
 	import { page } from '$app/stores';
+	// import HeapAnalytics from '$lib/components/heap/HeapAnalytics.svelte';
 	import AppFooter from '$lib/components/layout/AppFooter.svelte';
 	import Breadcrumbs from '$lib/components/layout/Navbar.svelte';
 	import LoadingSpinner from '$lib/components/LoadingSpinner.svelte';
-	// import HeapAnalytics from '$lib/components/heap/HeapAnalytics.svelte';
 
 	import '../scss/index.scss';
 
@@ -47,6 +47,5 @@
 	{:catch error}
 		<p>Something went wrong: {error.message}</p>
 	{/await}
-
 	<SvelteQueryDevtools styleNonce={undefined} />
 </QueryClientProvider>

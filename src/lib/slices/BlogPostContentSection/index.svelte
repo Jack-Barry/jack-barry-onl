@@ -1,7 +1,8 @@
 <script lang="ts">
-	import Image from '$lib/components/prismic/Image.svelte';
 	import type { Content } from '@prismicio/client';
 	import { PrismicRichText } from '@prismicio/svelte';
+
+	import Image from '$lib/components/prismic/Image.svelte';
 
 	export let slice: Content.BlogPostSectionSlice;
 

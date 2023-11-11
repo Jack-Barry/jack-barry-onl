@@ -1,5 +1,6 @@
 <script lang="ts">
-	type TagObject = { tag: string; selected?: boolean };
+	import type { TagObject } from './types';
+
 	export let tags: TagObject[];
 	export let onClick: (tag: TagObject) => void | Promise<void> = () => {};
 </script>

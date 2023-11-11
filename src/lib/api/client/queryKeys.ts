@@ -1,4 +1,4 @@
-import type { ApiPrismicGetBlogPostsOptions } from '../types/prismic';
+import type { ApiPrismicGetBlogPostsOptions } from '../common/prismic';
 
 /** All query keys used throughout the app */
 export const queryKeys = {

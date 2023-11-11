@@ -1,18 +1,23 @@
 <script>
 	import ArrowRight from 'bootstrap-icons/icons/arrow-right.svg?component';
+
 	import AboutMeSection from '$lib/components/content/AboutMeSection.svelte';
 	import BlogPostPreview from '$lib/components/content/BlogPostPreview.svelte';
+	import { readable } from 'svelte/store';
+	import { TITLE_PREFIX } from '$lib/utils/titles';
 
 	export let data;
+
+	const activeTags = readable(data.allTags);
 </script>
 
 <svelte:head>
-	<title>Jack Barry | Professional Nerd</title>
-	<meta name="description" content="" />
+	<title>{TITLE_PREFIX}Professional Nerd</title>
+	<meta name="description" content="Jack Barry is a lucky guy who gets paid to be a nerd" />
 </svelte:head>
 
 <div class="animate__animated animate__pulse animate__delay-1s">
-	<BlogPostPreview post={data.latestPost} withIcon activeTags={data.allTags} />
+	<BlogPostPreview post={data.latestPost} {activeTags} withIcon />
 </div>
 <div class="mt-3 d-flex justify-content-end">
 	<a class="icon-link icon-link-hover" href="/blog">

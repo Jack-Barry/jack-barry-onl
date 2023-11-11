@@ -1,7 +1,7 @@
 import { createClient } from '$lib/prismicio';
 import { filter, type Client } from '@prismicio/client';
 import type { AllDocumentTypes } from '../../../prismicio-types';
-import type { ApiPrismicGetBlogPostsOptions } from '../types/prismic';
+import type { ApiPrismicGetBlogPostsOptions } from '../common/prismic';
 import type { LoadEvent } from '@sveltejs/kit';
 
 export function apiPrismic(options: { fetch: LoadEvent['fetch'] }) {
@@ -59,7 +59,7 @@ async function getBlogPosts(
 	client: Client<AllDocumentTypes>,
 	options: ApiPrismicGetBlogPostsOptions
 ) {
-	const { page, searchTerm, tags } = options;
+	const { page, searchTerm, tags, graphQuery } = options;
 
 	const filters: string[] = [];
 
@@ -72,8 +72,9 @@ async function getBlogPosts(
 	}
 
 	return await client.getByType('blog_post', {
-		pageSize: 10,
+		pageSize: 1,
 		page,
-		filters
+		filters,
+		graphQuery
 	});
 }

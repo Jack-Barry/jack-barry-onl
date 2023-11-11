@@ -3,12 +3,14 @@ import { createInfiniteQuery } from '@tanstack/svelte-query';
 import { derived, writable } from 'svelte/store';
 
 import type { BlogPostDocument } from '../../../prismicio-types';
-import type { ApiPrismicGetBlogPostsOptions } from '../types/prismic';
+import type { ApiPrismicGetBlogPostsOptions } from '../common/prismic';
 import { queryKeys } from './queryKeys';
 import { fetchJson } from './fetch';
 
-export function infiniteQueryBlogPosts() {
-	const queryOptions = writable<Omit<ApiPrismicGetBlogPostsOptions, 'page'>>({});
+type infiniteQueryBlogPostsOptions = Omit<ApiPrismicGetBlogPostsOptions, 'page' | 'graphQuery'> & { previewsOnly?: boolean }
+
+export function infiniteQueryBlogPosts(defaultOptions: infiniteQueryBlogPostsOptions = {}) {
+	const queryOptions = writable<infiniteQueryBlogPostsOptions>(defaultOptions);
 
 	const query = createInfiniteQuery(
 		derived(queryOptions, ($queryOptions) => ({
@@ -16,6 +18,10 @@ export function infiniteQueryBlogPosts() {
 			queryKey: queryKeys.prismic.blog_post.infinite($queryOptions),
 			async queryFn({ pageParam }: { pageParam: number }) {
 				const search = searchParamsWithPage({ pageParam });
+
+				if ($queryOptions.previewsOnly) {
+					search.set('previewsOnly', 'true')
+				}
 
 				if ($queryOptions.searchTerm?.length) {
 					search.set('searchTerm', $queryOptions.searchTerm);

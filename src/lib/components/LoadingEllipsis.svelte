@@ -11,7 +11,7 @@
 
 			return '';
 		});
-	}, 300);
+	}, 200);
 
 	onDestroy(() => {
 		clearInterval(interval);

@@ -2,27 +2,13 @@
 	import { SliceZone } from '@prismicio/svelte';
 	import { components } from '$lib/slices';
 	import { formattedDate } from '$lib/utils/dates';
-	import type {
-		CodeBlockSlice,
-		EditNoticeSlice,
-		BlogPostSectionSlice,
-		BlogPostImageSlice
-	} from '../../../../prismicio-types.js';
-	export let data;
+	import { TITLE_PREFIX } from '$lib/utils/titles';
 
-	const editSlices: EditNoticeSlice[] = [];
-	const contentSlices: (BlogPostSectionSlice | CodeBlockSlice | BlogPostImageSlice)[] = [];
-	data.blogPost.data.body.forEach((slice) => {
-		if (slice.slice_type === 'edit_notice') {
-			editSlices.push(slice);
-		} else {
-			contentSlices.push(slice);
-		}
-	});
+	export let data;
 </script>
 
 <svelte:head>
-	<title>Jack Barry | {data.blogPost.data.meta_title}</title>
+	<title>{TITLE_PREFIX}{data.blogPost.data.meta_title}</title>
 	<meta name="description" content={data.blogPost.data.meta_description} />
 </svelte:head>
 
@@ -36,10 +22,4 @@
 	{/if}
 </div>
 <hr class="mt-0" />
-{#if editSlices.length}
-	<SliceZone slices={editSlices} {components} />
-	<hr />
-{/if}
-<div class="mt-3">
-	<SliceZone slices={contentSlices} {components} />
-</div>
+<SliceZone slices={data.blogPost.data.body} {components} />

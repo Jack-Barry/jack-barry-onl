@@ -3,14 +3,6 @@
 	export let id: string;
 	export let title: string;
 	export let bodyClass: string = '';
-
-	let accordionBodyClass = '';
-	$: {
-		accordionBodyClass = 'accordion-body';
-		if (bodyClass) {
-			accordionBodyClass += ` ${bodyClass}`;
-		}
-	}
 </script>
 
 <div class="accordion-item">
@@ -27,7 +19,7 @@
 		</button>
 	</h2>
 	<div {id} class="accordion-collapse collapse" data-bs-parent="#{parentId}">
-		<div class={accordionBodyClass}>
+		<div class:accordion-body={true} class={bodyClass}>
 			<slot />
 		</div>
 	</div>

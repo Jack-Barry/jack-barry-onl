@@ -1,13 +1,17 @@
 <script lang="ts">
 	import { PrismicRichText } from '@prismicio/svelte';
+
+	import AccordionItem from '$lib/components/bootstrap/AccordionItem.svelte';
+	import Image from '$lib/components/prismic/Image.svelte';
+
 	import type { AboutPageDocument } from '../../../prismicio-types';
-	import AccordionItem from '../bootstrap/AccordionItem.svelte';
-	import Image from '../prismic/Image.svelte';
+	import LoadingEllipsis from '../LoadingEllipsis.svelte';
 
 	export let aboutMe: AboutPageDocument;
 	const accordionId = 'aboutMeAccordion';
 </script>
 
+<LoadingEllipsis />
 <h2>About me</h2>
 <div class="accordion mb-5" id={accordionId}>
 	<AccordionItem parentId={accordionId} id="accordion-item-career" title="Career">

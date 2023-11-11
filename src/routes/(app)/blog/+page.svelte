@@ -12,10 +12,13 @@
 	import { useDebouncedInput } from '$lib/utils/debounce.js';
 	import LoadingEllipsis from '$lib/components/LoadingEllipsis.svelte';
 	import TransitionContainer from '$lib/components/layout/TransitionContainer.svelte';
+	import type { TagObject } from '$lib/components/content/types.js';
+	import { TITLE_PREFIX } from '$lib/utils/titles';
+	import type { BlogPostDocument } from '../../../prismicio-types.js';
 
 	export let data;
 
-	const { queryOptions, query } = infiniteQueryBlogPosts();
+	const { queryOptions, query } = infiniteQueryBlogPosts({ previewsOnly: true });
 	const filtersActive = derived(queryOptions, ($queryOptions) => {
 		return !!($queryOptions.searchTerm?.length || $queryOptions.tags?.length);
 	});
@@ -28,13 +31,16 @@
 	const { debouncedInputValue: debouncedSearchTerm, liveInputValue: liveSearchTerm } =
 		useDebouncedInput();
 
-	const tags = writable(data.allTags.map((t) => ({ tag: t, selected: false })));
+	const tags = writable(data.allTags.map<TagObject>((t) => ({ tag: t, selected: false })));
 	const ratioTagsSelected = writable(1);
+	const selectedTags = derived(tags, ($tags) =>
+		$tags.filter(({ selected }) => selected).map(({ tag }) => tag)
+	);
 
-	function toggleTag(tag: string) {
+	function toggleTag(tagObj: TagObject) {
 		tags.update((prev) =>
 			prev.map((t) => {
-				if (t.tag !== tag) {
+				if (t.tag !== tagObj.tag) {
 					return t;
 				}
 
@@ -46,26 +52,27 @@
 	function toggleAllTags(selected: boolean) {
 		tags.update((prev) => prev.map((t) => ({ ...t, selected })));
 	}
-
 	$: {
 		queryOptions.update((prev) => ({ ...prev, searchTerm: $debouncedSearchTerm }));
 	}
 	$: {
-		const selectedTags = $tags.filter((t) => t.selected).map((t) => t.tag);
-		ratioTagsSelected.set(selectedTags.length / data.allTags.length);
-		if (!selectedTags.length || selectedTags.length === data.allTags.length) {
+		ratioTagsSelected.set($selectedTags.length / data.allTags.length);
+		if (!$selectedTags.length || $selectedTags.length === data.allTags.length) {
 			// if all or none are selected, tag filtering is irrelevant
 			queryOptions.update((prev) => ({ ...prev, tags: undefined }));
 		} else {
-			queryOptions.update((prev) => ({ ...prev, tags: selectedTags }));
+			queryOptions.update((prev) => ({ ...prev, tags: $selectedTags }));
 		}
 	}
-
-	$: visiblySelectedTags = $queryOptions.tags || $ratioTagsSelected ? data.allTags : [];
+	$: posts = $query.data?.pages.reduce<BlogPostDocument<string>[]>((result, current) => {
+		result.push(...current.results);
+		return result;
+	}, []);
+	$: totalPosts = $query.data?.pages.length ? $query.data.pages[0].total_results_size : 0;
 </script>
 
 <svelte:head>
-	<title>Jack Barry | Blog</title>
+	<title>{TITLE_PREFIX}Blog</title>
 	<meta name="description" content="Blog posts by Jack Barry" />
 </svelte:head>
 
@@ -119,12 +126,7 @@
 			<header>Filter by tag:</header>
 			<div class="d-flex align-items-start gap-2 flex-column flex-sm-row">
 				<div>
-					<TagsList
-						tags={$tags}
-						onClick={(tag) => {
-							toggleTag(tag.tag);
-						}}
-					/>
+					<TagsList tags={$tags} onClick={toggleTag} />
 				</div>
 				<div class="flex-fill d-flex flex-row flex-sm-column gap-1">
 					<div>
@@ -159,24 +161,26 @@
 {/if}
 <TransitionContainer>
 	<div class="d-flex gap-3 flex-column pb-3">
+		{#if $filtersActive}
+			<span>
+				Number of matching posts:
+				{#if $query.isLoading}
+					<LoadingEllipsis />
+				{:else}
+					<span class="fw-bold">{totalPosts}</span>
+				{/if}
+			</span>
+		{/if}
 		{#if $query.isLoading}
 			<div class="w-100 d-flex justify-content-center mt-5">
 				<LoadingSpinner size="3rem" />
 			</div>
 		{:else if $query.error}
 			<div>{JSON.stringify($query.error.message)}</div>
-		{:else if $query.data?.pages.length && $query.data.pages[0].results.length}
+		{:else if posts?.length}
 			<div transition:fly class="d-flex flex-column gap-3">
-				{#each $query.data.pages as page}
-					{#each page.results || [] as post}
-						<BlogPostPreview
-							{post}
-							activeTags={visiblySelectedTags}
-							onTagClick={(t) => {
-								toggleTag(t.tag);
-							}}
-						/>
-					{/each}
+				{#each posts as post}
+					<BlogPostPreview {post} activeTags={selectedTags} onTagClick={toggleTag} />
 				{/each}
 				<button
 					class="btn btn-outline-primary"

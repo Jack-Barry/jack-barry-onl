@@ -1,11 +1,11 @@
 export const prerender = true;
 
 export async function load({ parent }) {
-	const { allTags } = await parent();
+	const { allTags, breadcrumbs } = await parent();
 
 	return {
 		breadcrumbs: [
-			{ label: 'Home', href: '/home' },
+			...breadcrumbs,
 			{ label: 'Blog', href: '/blog' }
 		],
 		allTags

@@ -1,4 +1,5 @@
 import { QueryClient } from '@tanstack/svelte-query';
+
 import { browser } from '$app/environment';
 
 export const prerender = true;

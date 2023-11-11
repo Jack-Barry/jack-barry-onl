@@ -1,0 +1,1 @@
+export type TagObject = { tag: string; selected?: boolean };
