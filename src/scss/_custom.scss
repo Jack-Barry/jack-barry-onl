@@ -1,12 +1,15 @@
-[data-slice-type='code_block'] > div {
-	border-radius: $border-radius-lg;
-}
-#bmc-wbtn {
-	height: 48px !important;
-	width: 48px !important;
+.code {
+	font-family: $font-family-monospace;
+	@include font-size($code-font-size);
+	color: var(--#{$prefix}code-color);
+	word-wrap: break-word;
 
-	img {
-		height: 36px !important;
-		width: 36px !important;
+	// Streamline the style when inside anchors to avoid broken underline and more
+	a>& {
+		color: inherit;
 	}
+}
+
+[data-slice-type='code_block']>div {
+	border-radius: $border-radius-lg;
 }

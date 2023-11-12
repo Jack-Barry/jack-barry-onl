@@ -1,0 +1,20 @@
+[
+	{
+		"__TYPE__": "SharedSliceContent",
+		"variation": "default",
+		"primary": {
+			"policy": {
+				"__TYPE__": "StructuredTextContent",
+				"value": [
+					{
+						"type": "paragraph",
+						"content": {
+							"text": "Proident duis magna ex ad eiusmod consectetur velit esse duis commodo minim culpa."
+						}
+					}
+				]
+			}
+		},
+		"items": []
+	}
+]

@@ -35,9 +35,12 @@
 				</ul>
 			</div>
 		{/if}
-		<div class="mb-1 d-flex align-items-center fs-fine-print">
-			<CopyrightSvg transform="scale(0.6)" />
-			<span>{new Date().getFullYear()} All rights reserved.</span>
+		<div class="mb-1 d-flex align-items-center fs-fine-print gap-2">
+			<div class="d-flex align-items-center">
+				<CopyrightSvg transform="scale(0.6)" />
+				<span>{new Date().getFullYear()} All rights reserved.</span>
+			</div>
+			<a href="/privacy-policy">Privacy policy</a>
 		</div>
 	</div>
 </div>

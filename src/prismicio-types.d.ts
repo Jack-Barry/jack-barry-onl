@@ -7,11 +7,22 @@ type Simplify<T> = { [KeyType in keyof T]: T[KeyType] };
 type AboutPageDocumentDataSlicesSlice = never;
 
 /**
- * Content for About Me documents
+ * Content for About Page documents
  */
 interface AboutPageDocumentData {
 	/**
-	 * Career field in *About Me*
+	 * Site Info field in *About Page*
+	 *
+	 * - **Field Type**: Rich Text
+	 * - **Placeholder**: *None*
+	 * - **API ID Path**: about_page.site_info
+	 * - **Tab**: Main
+	 * - **Documentation**: https://prismic.io/docs/field#rich-text-title
+	 */
+	site_info: prismic.RichTextField;
+
+	/**
+	 * Career field in *About Page*
 	 *
 	 * - **Field Type**: Rich Text
 	 * - **Placeholder**: *None*
@@ -22,7 +33,7 @@ interface AboutPageDocumentData {
 	career: prismic.RichTextField;
 
 	/**
-	 * Personal field in *About Me*
+	 * Personal field in *About Page*
 	 *
 	 * - **Field Type**: Rich Text
 	 * - **Placeholder**: *None*
@@ -33,7 +44,7 @@ interface AboutPageDocumentData {
 	personal: prismic.RichTextField;
 
 	/**
-	 * Slice Zone field in *About Me*
+	 * Slice Zone field in *About Page*
 	 *
 	 * - **Field Type**: Slice Zone
 	 * - **Placeholder**: *None*
@@ -45,7 +56,7 @@ interface AboutPageDocumentData {
 }
 
 /**
- * About Me document from Prismic
+ * About Page document from Prismic
  *
  * - **API ID**: `about_page`
  * - **Repeatable**: `false`
@@ -202,7 +213,96 @@ export type HomePageDocument<Lang extends string = string> = prismic.PrismicDocu
 	Lang
 >;
 
-export type AllDocumentTypes = AboutPageDocument | BlogPostDocument | HomePageDocument;
+/**
+ * Content for Label documents
+ */
+interface LabelDocumentData {
+	/**
+	 * Label Type field in *Label*
+	 *
+	 * - **Field Type**: Select
+	 * - **Placeholder**: *None*
+	 * - **API ID Path**: label.label_type
+	 * - **Tab**: Main
+	 * - **Documentation**: https://prismic.io/docs/field#select
+	 */
+	label_type: prismic.SelectField<'code' | 'highlight'>;
+}
+
+/**
+ * Label document from Prismic
+ *
+ * - **API ID**: `label`
+ * - **Repeatable**: `true`
+ * - **Documentation**: https://prismic.io/docs/custom-types
+ *
+ * @typeParam Lang - Language API ID of the document.
+ */
+export type LabelDocument<Lang extends string = string> = prismic.PrismicDocumentWithUID<
+	Simplify<LabelDocumentData>,
+	'label',
+	Lang
+>;
+
+type PrivacyPolicyDocumentDataSlicesSlice = PrivacyPolicySlice;
+
+/**
+ * Content for Privacy Policy documents
+ */
+interface PrivacyPolicyDocumentData {
+	/**
+	 * Slice Zone field in *Privacy Policy*
+	 *
+	 * - **Field Type**: Slice Zone
+	 * - **Placeholder**: *None*
+	 * - **API ID Path**: privacy_policy.slices[]
+	 * - **Tab**: Main
+	 * - **Documentation**: https://prismic.io/docs/field#slices
+	 */
+	slices: prismic.SliceZone<PrivacyPolicyDocumentDataSlicesSlice> /**
+	 * Meta Description field in *Privacy Policy*
+	 *
+	 * - **Field Type**: Text
+	 * - **Placeholder**: A brief summary of the page
+	 * - **API ID Path**: privacy_policy.meta_description
+	 * - **Tab**: SEO & Metadata
+	 * - **Documentation**: https://prismic.io/docs/field#key-text
+	 */;
+	meta_description: prismic.KeyTextField;
+
+	/**
+	 * Meta Title field in *Privacy Policy*
+	 *
+	 * - **Field Type**: Text
+	 * - **Placeholder**: A title of the page used for social media and search engines
+	 * - **API ID Path**: privacy_policy.meta_title
+	 * - **Tab**: SEO & Metadata
+	 * - **Documentation**: https://prismic.io/docs/field#key-text
+	 */
+	meta_title: prismic.KeyTextField;
+}
+
+/**
+ * Privacy Policy document from Prismic
+ *
+ * - **API ID**: `privacy_policy`
+ * - **Repeatable**: `false`
+ * - **Documentation**: https://prismic.io/docs/custom-types
+ *
+ * @typeParam Lang - Language API ID of the document.
+ */
+export type PrivacyPolicyDocument<Lang extends string = string> = prismic.PrismicDocumentWithoutUID<
+	Simplify<PrivacyPolicyDocumentData>,
+	'privacy_policy',
+	Lang
+>;
+
+export type AllDocumentTypes =
+	| AboutPageDocument
+	| BlogPostDocument
+	| HomePageDocument
+	| LabelDocument
+	| PrivacyPolicyDocument;
 
 /**
  * Primary content in *BlogPostImage → Primary*
@@ -402,6 +502,48 @@ type EditNoticeSliceVariation = EditNoticeSliceDefault;
  */
 export type EditNoticeSlice = prismic.SharedSlice<'edit_notice', EditNoticeSliceVariation>;
 
+/**
+ * Primary content in *PrivacyPolicy → Primary*
+ */
+export interface PrivacyPolicySliceDefaultPrimary {
+	/**
+	 * policy field in *PrivacyPolicy → Primary*
+	 *
+	 * - **Field Type**: Rich Text
+	 * - **Placeholder**: *None*
+	 * - **API ID Path**: privacy_policy.primary.policy
+	 * - **Documentation**: https://prismic.io/docs/field#rich-text-title
+	 */
+	policy: prismic.RichTextField;
+}
+
+/**
+ * Default variation for PrivacyPolicy Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Default
+ * - **Documentation**: https://prismic.io/docs/slice
+ */
+export type PrivacyPolicySliceDefault = prismic.SharedSliceVariation<
+	'default',
+	Simplify<PrivacyPolicySliceDefaultPrimary>,
+	never
+>;
+
+/**
+ * Slice variation for *PrivacyPolicy*
+ */
+type PrivacyPolicySliceVariation = PrivacyPolicySliceDefault;
+
+/**
+ * PrivacyPolicy Shared Slice
+ *
+ * - **API ID**: `privacy_policy`
+ * - **Description**: PrivacyPolicy
+ * - **Documentation**: https://prismic.io/docs/slice
+ */
+export type PrivacyPolicySlice = prismic.SharedSlice<'privacy_policy', PrivacyPolicySliceVariation>;
+
 declare module '@prismicio/client' {
 	interface CreateClient {
 		(
@@ -421,6 +563,11 @@ declare module '@prismicio/client' {
 			HomePageDocument,
 			HomePageDocumentData,
 			HomePageDocumentDataSlicesSlice,
+			LabelDocument,
+			LabelDocumentData,
+			PrivacyPolicyDocument,
+			PrivacyPolicyDocumentData,
+			PrivacyPolicyDocumentDataSlicesSlice,
 			AllDocumentTypes,
 			BlogPostImageSlice,
 			BlogPostImageSliceDefaultPrimary,
@@ -437,7 +584,11 @@ declare module '@prismicio/client' {
 			EditNoticeSlice,
 			EditNoticeSliceDefaultPrimary,
 			EditNoticeSliceVariation,
-			EditNoticeSliceDefault
+			EditNoticeSliceDefault,
+			PrivacyPolicySlice,
+			PrivacyPolicySliceDefaultPrimary,
+			PrivacyPolicySliceVariation,
+			PrivacyPolicySliceDefault
 		};
 	}
 }
