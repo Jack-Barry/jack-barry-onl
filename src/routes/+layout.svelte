@@ -12,6 +12,7 @@
 	import AppFooter from '$lib/components/layout/AppFooter.svelte';
 	import Breadcrumbs from '$lib/components/layout/Navbar.svelte';
 	import LoadingSpinner from '$lib/components/LoadingSpinner.svelte';
+	import { getUserThemePreference } from '$lib/utils/theme/getUserThemePreference';
 
 	import '../scss/index.scss';
 
@@ -21,6 +22,9 @@
 		? // @ts-ignore -- don't need typings for this
 		  import('bootstrap/dist/js/bootstrap.bundle').then((module) => module.Component)
 		: new Promise(() => {});
+	if (browser) {
+		getUserThemePreference();
+	}
 </script>
 
 <svelte:head>
