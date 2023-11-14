@@ -6,7 +6,7 @@
 	export let data;
 
 	const { privacyPolicy } = data;
-	const slice = privacyPolicy.data.slices[0] as PrivacyPolicySlice;
+	const slice = privacyPolicy.data.slices[1] as PrivacyPolicySlice;
 </script>
 
 <h1>Privacy Policy</h1>

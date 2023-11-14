@@ -1,8 +1,8 @@
 {
-  "id": "privacy_policy",
+  "id": "privacy_policy_modal_content",
   "type": "SharedSlice",
-  "name": "PrivacyPolicy",
-  "description": "PrivacyPolicy",
+  "name": "PrivacyPolicyModalContent",
+  "description": "PrivacyPolicyModalContent",
   "variations": [
     {
       "id": "default",
@@ -12,15 +12,14 @@
       "description": "Default",
       "imageUrl": "",
       "primary": {
-        "policy": {
+        "policy_notice": {
           "type": "StructuredText",
           "config": {
-            "label": "policy",
+            "label": "Policy Notice",
             "placeholder": "",
             "allowTargetBlank": true,
             "multi": "paragraph,preformatted,heading1,heading2,heading3,heading4,heading5,heading6,strong,em,hyperlink,image,embed,list-item,o-list-item,rtl",
             "labels": [
-              "code",
               "text-bg-warning"
             ]
           }

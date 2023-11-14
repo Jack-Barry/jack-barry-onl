@@ -1,6 +1,7 @@
 {
   "recommendations": [
     "svelte.svelte-vscode",
-    "ms-edgedevtools.vscode-edge-devtools"
+    "ms-edgedevtools.vscode-edge-devtools",
+    "esbenp.prettier-vscode"
   ]
 }

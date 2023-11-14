@@ -4,7 +4,7 @@ import { browser } from '$app/environment';
 
 export const prerender = true;
 
-export const load = async () => {
+export const load = async ({ data }) => {
 	const queryClient = new QueryClient({
 		defaultOptions: {
 			queries: {
@@ -14,5 +14,5 @@ export const load = async () => {
 		}
 	});
 
-	return { queryClient };
+	return { ...data, queryClient };
 };

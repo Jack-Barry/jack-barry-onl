@@ -213,38 +213,7 @@ export type HomePageDocument<Lang extends string = string> = prismic.PrismicDocu
 	Lang
 >;
 
-/**
- * Content for Label documents
- */
-interface LabelDocumentData {
-	/**
-	 * Label Type field in *Label*
-	 *
-	 * - **Field Type**: Select
-	 * - **Placeholder**: *None*
-	 * - **API ID Path**: label.label_type
-	 * - **Tab**: Main
-	 * - **Documentation**: https://prismic.io/docs/field#select
-	 */
-	label_type: prismic.SelectField<'code' | 'highlight'>;
-}
-
-/**
- * Label document from Prismic
- *
- * - **API ID**: `label`
- * - **Repeatable**: `true`
- * - **Documentation**: https://prismic.io/docs/custom-types
- *
- * @typeParam Lang - Language API ID of the document.
- */
-export type LabelDocument<Lang extends string = string> = prismic.PrismicDocumentWithUID<
-	Simplify<LabelDocumentData>,
-	'label',
-	Lang
->;
-
-type PrivacyPolicyDocumentDataSlicesSlice = PrivacyPolicySlice;
+type PrivacyPolicyDocumentDataSlicesSlice = PrivacyPolicyModalContentSlice | PrivacyPolicySlice;
 
 /**
  * Content for Privacy Policy documents
@@ -301,7 +270,6 @@ export type AllDocumentTypes =
 	| AboutPageDocument
 	| BlogPostDocument
 	| HomePageDocument
-	| LabelDocument
 	| PrivacyPolicyDocument;
 
 /**
@@ -544,6 +512,51 @@ type PrivacyPolicySliceVariation = PrivacyPolicySliceDefault;
  */
 export type PrivacyPolicySlice = prismic.SharedSlice<'privacy_policy', PrivacyPolicySliceVariation>;
 
+/**
+ * Primary content in *PrivacyPolicyModalContent → Primary*
+ */
+export interface PrivacyPolicyModalContentSliceDefaultPrimary {
+	/**
+	 * Policy Notice field in *PrivacyPolicyModalContent → Primary*
+	 *
+	 * - **Field Type**: Rich Text
+	 * - **Placeholder**: *None*
+	 * - **API ID Path**: privacy_policy_modal_content.primary.policy_notice
+	 * - **Documentation**: https://prismic.io/docs/field#rich-text-title
+	 */
+	policy_notice: prismic.RichTextField;
+}
+
+/**
+ * Default variation for PrivacyPolicyModalContent Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Default
+ * - **Documentation**: https://prismic.io/docs/slice
+ */
+export type PrivacyPolicyModalContentSliceDefault = prismic.SharedSliceVariation<
+	'default',
+	Simplify<PrivacyPolicyModalContentSliceDefaultPrimary>,
+	never
+>;
+
+/**
+ * Slice variation for *PrivacyPolicyModalContent*
+ */
+type PrivacyPolicyModalContentSliceVariation = PrivacyPolicyModalContentSliceDefault;
+
+/**
+ * PrivacyPolicyModalContent Shared Slice
+ *
+ * - **API ID**: `privacy_policy_modal_content`
+ * - **Description**: PrivacyPolicyModalContent
+ * - **Documentation**: https://prismic.io/docs/slice
+ */
+export type PrivacyPolicyModalContentSlice = prismic.SharedSlice<
+	'privacy_policy_modal_content',
+	PrivacyPolicyModalContentSliceVariation
+>;
+
 declare module '@prismicio/client' {
 	interface CreateClient {
 		(
@@ -563,8 +576,6 @@ declare module '@prismicio/client' {
 			HomePageDocument,
 			HomePageDocumentData,
 			HomePageDocumentDataSlicesSlice,
-			LabelDocument,
-			LabelDocumentData,
 			PrivacyPolicyDocument,
 			PrivacyPolicyDocumentData,
 			PrivacyPolicyDocumentDataSlicesSlice,
@@ -588,7 +599,11 @@ declare module '@prismicio/client' {
 			PrivacyPolicySlice,
 			PrivacyPolicySliceDefaultPrimary,
 			PrivacyPolicySliceVariation,
-			PrivacyPolicySliceDefault
+			PrivacyPolicySliceDefault,
+			PrivacyPolicyModalContentSlice,
+			PrivacyPolicyModalContentSliceDefaultPrimary,
+			PrivacyPolicyModalContentSliceVariation,
+			PrivacyPolicyModalContentSliceDefault
 		};
 	}
 }

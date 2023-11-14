@@ -1,11 +1,8 @@
-import { apiPrismic } from '$lib/api/server/prismic.js';
-
 export const prerender = true;
 
-export async function load({ url, fetch, parent }) {
-  const privacyPolicy = await apiPrismic({ fetch }).privacyPolicy.get()
+export async function load({ url, parent }) {
 
-  const { breadcrumbs } = await parent()
+  const { breadcrumbs, privacyPolicy } = await parent()
   return {
     breadcrumbs: [
       ...breadcrumbs,

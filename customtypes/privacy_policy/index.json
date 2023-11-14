@@ -11,6 +11,9 @@
 				"fieldset": "Slice Zone",
 				"config": {
 					"choices": {
+						"privacy_policy_modal_content": {
+							"type": "SharedSlice"
+						},
 						"privacy_policy": {
 							"type": "SharedSlice"
 						}

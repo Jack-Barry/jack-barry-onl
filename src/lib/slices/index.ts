@@ -5,11 +5,13 @@ import BlogPostContentSection from './BlogPostContentSection/index.svelte';
 import BlogPostCodeSnippet from './BlogPostCodeSnippet/index.svelte';
 import BlogPostEditNotice from './BlogPostEditNotice/index.svelte';
 import PrivacyPolicy from './PrivacyPolicy/index.svelte';
+import PrivacyPolicyModalContent from './PrivacyPolicyModalContent/index.svelte';
 
 export const components = {
 	blog_post_image: BlogPostImage,
 	blog_post_section: BlogPostContentSection,
 	code_block: BlogPostCodeSnippet,
 	edit_notice: BlogPostEditNotice,
-	privacy_policy: PrivacyPolicy
+	privacy_policy: PrivacyPolicy,
+	privacy_policy_modal_content: PrivacyPolicyModalContent
 };

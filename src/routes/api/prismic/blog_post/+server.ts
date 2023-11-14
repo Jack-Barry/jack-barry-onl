@@ -20,5 +20,5 @@ export const GET = async ({ fetch, url }) => {
 		tags,
 		graphQuery: previewsOnly ? GRAPH_QUERIES_PRISMIC.GET_BLOG_POSTS.PREVIEWS_ONLY : undefined
 	});
-	return new Response(JSON.stringify(data));
+	return new Response(JSON.stringify(data), { status: 200 });
 };

@@ -1,6 +1,9 @@
 <script>
 	import { browser } from '$app/environment';
 	import { PUBLIC_HEAP_ID } from '$env/static/public';
+	import { userPreviouslyDeniedCookieUsage } from '$lib/utils/privacy';
+
+	const userAllowsAnalytics = !userPreviouslyDeniedCookieUsage();
 
 	if (browser && !!PUBLIC_HEAP_ID) {
 		(window.heap = window.heap || []),
@@ -35,6 +38,8 @@
 				)
 					heap[p[o]] = n(p[o]);
 			});
-		heap.load(PUBLIC_HEAP_ID, { secureCookie: true });
+		if (userAllowsAnalytics) {
+			heap.load(PUBLIC_HEAP_ID, { secureCookie: true });
+		}
 	}
 </script>
