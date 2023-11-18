@@ -1,8 +1,14 @@
+import type { LoadEvent } from '@sveltejs/kit';
+import { type Client, filter, type Ordering } from '@prismicio/client';
+
 import { createClient } from '$lib/prismicio';
-import { filter, type Client } from '@prismicio/client';
 import type { AllDocumentTypes } from '../../../prismicio-types';
 import type { ApiPrismicGetBlogPostsOptions } from '../common/prismic';
-import type { LoadEvent } from '@sveltejs/kit';
+
+const ORDER_BY_DATE_DESCENDING: Ordering = {
+	field: 'document.first_publication_date',
+	direction: 'desc'
+};
 
 export function apiPrismic(options: { fetch: LoadEvent['fetch'] }) {
 	const { fetch } = options;
@@ -27,10 +33,7 @@ export function apiPrismic(options: { fetch: LoadEvent['fetch'] }) {
 			},
 			async getLatest() {
 				return await queryClient.getSingle('blog_post', {
-					orderings: {
-						field: 'document.first_publication_date',
-						direction: 'desc'
-					}
+					orderings: [ORDER_BY_DATE_DESCENDING]
 				});
 			}
 		},
@@ -80,6 +83,7 @@ async function getBlogPosts(
 		pageSize: 10,
 		page,
 		filters,
-		graphQuery
+		graphQuery,
+		orderings: [ORDER_BY_DATE_DESCENDING]
 	});
 }
