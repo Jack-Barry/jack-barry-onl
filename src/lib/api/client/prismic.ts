@@ -7,7 +7,9 @@ import type { ApiPrismicGetBlogPostsOptions } from '../common/prismic';
 import { queryKeys } from './queryKeys';
 import { fetchJson } from './fetch';
 
-type infiniteQueryBlogPostsOptions = Omit<ApiPrismicGetBlogPostsOptions, 'page' | 'graphQuery'> & { previewsOnly?: boolean }
+type infiniteQueryBlogPostsOptions = Omit<ApiPrismicGetBlogPostsOptions, 'page' | 'graphQuery'> & {
+	previewsOnly?: boolean;
+};
 
 export function infiniteQueryBlogPosts(defaultOptions: infiniteQueryBlogPostsOptions = {}) {
 	const queryOptions = writable<infiniteQueryBlogPostsOptions>(defaultOptions);
@@ -20,7 +22,7 @@ export function infiniteQueryBlogPosts(defaultOptions: infiniteQueryBlogPostsOpt
 				const search = searchParamsWithPage({ pageParam });
 
 				if ($queryOptions.previewsOnly) {
-					search.set('previewsOnly', 'true')
+					search.set('previewsOnly', 'true');
 				}
 
 				if ($queryOptions.searchTerm?.length) {

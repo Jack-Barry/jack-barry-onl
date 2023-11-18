@@ -6,7 +6,7 @@
 </script>
 
 <div class="d-flex flex-wrap gap-1">
-	{#each tags.sort((a, b) => a.tag.localeCompare(b.tag)) as tag}
+	{#each tags.sort((a, b) => a.tag.localeCompare(b.tag)) as tag (tag.tag)}
 		<button
 			class="btn btn-sm"
 			class:btn-primary={tag.selected}

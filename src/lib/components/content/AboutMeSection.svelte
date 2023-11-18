@@ -5,7 +5,6 @@
 	import Image from '$lib/components/prismic/Image.svelte';
 
 	import type { AboutPageDocument } from '../../../prismicio-types';
-	import LoadingEllipsis from '../LoadingEllipsis.svelte';
 
 	export let aboutMe: AboutPageDocument;
 	const accordionId = 'aboutMeAccordion';

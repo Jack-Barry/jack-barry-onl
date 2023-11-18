@@ -1,4 +1,8 @@
 <script lang="ts">
+	import type { Content } from '@prismicio/client';
+	import { PrismicRichText } from '@prismicio/svelte';
+	import { writable } from 'svelte/store';
+
 	import LoadingEllipsis from '$lib/components/LoadingEllipsis.svelte';
 	import {
 		checkTrackingDataDeletionStatus,
@@ -7,9 +11,6 @@
 		getTrackingDataDeletionRequestId,
 		userPreviouslyDeniedCookieUsage
 	} from '$lib/utils/privacy';
-	import type { Content } from '@prismicio/client';
-	import { PrismicRichText } from '@prismicio/svelte';
-	import { writable } from 'svelte/store';
 
 	export let slice: Content.PrivacyPolicySlice;
 

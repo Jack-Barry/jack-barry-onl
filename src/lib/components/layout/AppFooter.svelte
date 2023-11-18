@@ -27,7 +27,7 @@
 		{#if !isLandingPage}
 			<div transition:scale class="mx-3 mx-sm-auto d-flex gap-2 align-items-center">
 				<ul class="list-unstyled d-flex gap-5 mb-0 flex-wrap align-items-center">
-					{#each socialIcons as socialIcon}
+					{#each socialIcons as socialIcon (socialIcon.href)}
 						<li>
 							<SocialLink href={socialIcon.href} Icon={socialIcon.Icon} />
 						</li>

@@ -37,6 +37,20 @@
 		$tags.filter(({ selected }) => selected).map(({ tag }) => tag)
 	);
 
+	$: {
+		queryOptions.update((prev) => ({ ...prev, searchTerm: $debouncedSearchTerm }));
+	}
+	$: {
+		ratioTagsSelected.set($selectedTags.length / data.allTags.length);
+		if (!$selectedTags.length || $selectedTags.length === data.allTags.length) {
+			// if all or none are selected, tag filtering is irrelevant
+			queryOptions.update((prev) => ({ ...prev, tags: undefined }));
+		} else {
+			queryOptions.update((prev) => ({ ...prev, tags: $selectedTags }));
+		}
+	}
+	$: totalPosts = $query.data?.pages.length ? $query.data.pages[0].total_results_size : 0;
+
 	function toggleTag(tagObj: TagObject) {
 		tags.update((prev) =>
 			prev.map((t) => {
@@ -52,23 +66,13 @@
 	function toggleAllTags(selected: boolean) {
 		tags.update((prev) => prev.map((t) => ({ ...t, selected })));
 	}
-	$: {
-		queryOptions.update((prev) => ({ ...prev, searchTerm: $debouncedSearchTerm }));
-	}
-	$: {
-		ratioTagsSelected.set($selectedTags.length / data.allTags.length);
-		if (!$selectedTags.length || $selectedTags.length === data.allTags.length) {
-			// if all or none are selected, tag filtering is irrelevant
-			queryOptions.update((prev) => ({ ...prev, tags: undefined }));
-		} else {
-			queryOptions.update((prev) => ({ ...prev, tags: $selectedTags }));
-		}
-	}
-	$: posts = $query.data?.pages.reduce<BlogPostDocument<string>[]>((result, current) => {
-		result.push(...current.results);
-		return result;
-	}, []);
-	$: totalPosts = $query.data?.pages.length ? $query.data.pages[0].total_results_size : 0;
+
+	const posts = derived(query, ($query) =>
+		$query.data?.pages.reduce<BlogPostDocument<string>[]>((result, current) => {
+			result = [...result, ...current.results];
+			return result;
+		}, [])
+	);
 </script>
 
 <svelte:head>
@@ -177,31 +181,31 @@
 			</div>
 		{:else if $query.error}
 			<div>{JSON.stringify($query.error.message)}</div>
-		{:else if posts?.length}
-			<div transition:fly class="d-flex flex-column gap-3">
-				{#each posts as post}
+		{:else if $posts?.length}
+			{#each $posts || [] as post (post.uid)}
+				<div transition:fly class="d-flex flex-column gap-3">
 					<BlogPostPreview {post} activeTags={selectedTags} onTagClick={toggleTag} />
-				{/each}
-				<button
-					class="btn btn-outline-primary"
-					on:click={() => {
-						$query.fetchNextPage();
-					}}
-					disabled={!$query.hasNextPage || $query.isFetchingNextPage}
-				>
-					{#if $query.isFetchingNextPage}
-						Loading more<LoadingEllipsis />
-					{:else if $query.hasNextPage}
-						Load More
-					{:else}
-						All posts{$filtersActive ? ' matching current filters' : ''} have been loaded
-					{/if}
-				</button>
-			</div>
+				</div>
+			{/each}
+			<button
+				class="btn btn-outline-primary"
+				on:click={() => {
+					$query.fetchNextPage();
+				}}
+				disabled={!$query.hasNextPage || $query.isFetchingNextPage}
+			>
+				{#if $query.isFetchingNextPage}
+					Loading more<LoadingEllipsis />
+				{:else if $query.hasNextPage}
+					Load More
+				{:else}
+					All posts{$filtersActive ? ' matching current filters' : ''} have been loaded
+				{/if}
+			</button>
 		{:else}
 			<div transition:fly class="alert alert-warning" role="alert">
 				No posts match the current filters
 			</div>
 		{/if}
-	</div>
-</TransitionContainer>
+	</div></TransitionContainer
+>

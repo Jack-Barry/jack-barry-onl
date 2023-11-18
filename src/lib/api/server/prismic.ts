@@ -41,7 +41,7 @@ export function apiPrismic(options: { fetch: LoadEvent['fetch'] }) {
 		},
 		privacyPolicy: {
 			async get() {
-				return await queryClient.getSingle('privacy_policy')
+				return await queryClient.getSingle('privacy_policy');
 			}
 		},
 		tags: {
