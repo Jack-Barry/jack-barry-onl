@@ -7,7 +7,7 @@
 
 {#if $page.data.breadcrumbs}
 	<!-- Padding to account for fixed header -->
-	<div class="py-5" />
+	<div class="py-5 mb-5" />
 	<div class="fixed-top py-3 bg-body shadow-sm">
 		<nav
 			transition:scale

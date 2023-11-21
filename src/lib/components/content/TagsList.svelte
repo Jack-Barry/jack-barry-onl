@@ -13,7 +13,9 @@
 			class:btn-outline-primary={!tag.selected}
 			on:click={() => {
 				onClick(tag);
-			}}>{tag.tag}</button
+			}}
 		>
+			{tag.tag}
+		</button>
 	{/each}
 </div>

@@ -15,10 +15,17 @@
 	import type { TagObject } from '$lib/components/content/types.js';
 	import { TITLE_PREFIX } from '$lib/utils/titles';
 	import type { BlogPostDocument } from '../../../prismicio-types.js';
+	import { page } from '$app/stores';
+	import { applyParamsToUrl } from '$lib/utils/searchParams.js';
+	import { BlogPostSearchParams } from '$lib/api/common/prismic/BlogPostSearchParams.js';
 
 	export let data;
 
-	const { queryOptions, query } = infiniteQueryBlogPosts({ previewsOnly: true });
+	const blogPostSearchParams = new BlogPostSearchParams($page.url.searchParams);
+	const { queryOptions, query } = infiniteQueryBlogPosts({
+		...blogPostSearchParams.asOptions,
+		previewsOnly: true
+	});
 	const filtersActive = derived(queryOptions, ($queryOptions) => {
 		return !!($queryOptions.searchTerm?.length || $queryOptions.tags?.length);
 	});
@@ -29,26 +36,39 @@
 	}
 
 	const { debouncedInputValue: debouncedSearchTerm, liveInputValue: liveSearchTerm } =
-		useDebouncedInput();
+		useDebouncedInput({ defaultValue: blogPostSearchParams.asOptions.searchTerm });
 
-	const tags = writable(data.allTags.map<TagObject>((t) => ({ tag: t, selected: false })));
+	const tags = writable(
+		data.allTags.map<TagObject>((t) => ({
+			tag: t,
+			selected: blogPostSearchParams.asOptions.tags.includes(t)
+		}))
+	);
 	const ratioTagsSelected = writable(1);
 	const selectedTags = derived(tags, ($tags) =>
 		$tags.filter(({ selected }) => selected).map(({ tag }) => tag)
 	);
 
-	$: {
+	$: $debouncedSearchTerm, handleSearchTermChange();
+	async function handleSearchTermChange() {
 		queryOptions.update((prev) => ({ ...prev, searchTerm: $debouncedSearchTerm }));
+		blogPostSearchParams.setSearchTerm($debouncedSearchTerm);
+		await applyParamsToUrl($page.url.searchParams, blogPostSearchParams.asURLSearchParams);
 	}
-	$: {
+
+	$: $selectedTags, handleSelectedTagsChange();
+	async function handleSelectedTagsChange() {
 		ratioTagsSelected.set($selectedTags.length / data.allTags.length);
-		if (!$selectedTags.length || $selectedTags.length === data.allTags.length) {
-			// if all or none are selected, tag filtering is irrelevant
-			queryOptions.update((prev) => ({ ...prev, tags: undefined }));
-		} else {
-			queryOptions.update((prev) => ({ ...prev, tags: $selectedTags }));
-		}
+
+		// if all or none are selected, tag filtering is irrelevant
+		const allOrNoneSelected = !$selectedTags.length || $selectedTags.length === data.allTags.length;
+		const tagsToFilterWith = allOrNoneSelected ? [] : $selectedTags;
+		queryOptions.update((prev) => ({ ...prev, tags: tagsToFilterWith }));
+
+		blogPostSearchParams.setTags(tagsToFilterWith);
+		await applyParamsToUrl($page.url.searchParams, blogPostSearchParams.asURLSearchParams);
 	}
+
 	$: totalPosts = $query.data?.pages.length ? $query.data.pages[0].total_results_size : 0;
 
 	function toggleTag(tagObj: TagObject) {

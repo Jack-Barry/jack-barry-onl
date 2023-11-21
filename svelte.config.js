@@ -13,12 +13,24 @@ const config = {
 		// See https://kit.svelte.dev/docs/adapters for more information about adapters.
 		adapter: adapter(),
 		csp: {
+			mode: 'auto',
 			directives: {
 				'default-src': ['self'],
-				'script-src': ['self', 'https://cdn.heapanalytics.com', 'https://heapanalytics.com', 'unsafe-inline', 'unsafe-eval'],
-				'img-src': ['self', 'data:', 'https://heapanalytics.com', 'https://images.prismic.io'],
-				'style-src': ['self', 'https://fonts.googleapis.com', 'https://heapanalytics.com', 'unsafe-inline'],
-				'font-src': ['self', 'https://fonts.gstatic.com', 'https://heapanalytics.com', 'https://*.auryc.com'],
+				'script-src': ['self', 'https://cdn.heapanalytics.com', 'https://heapanalytics.com'],
+				'img-src': [
+					'self',
+					'data:',
+					'https://heapanalytics.com',
+					'https://images.prismic.io',
+					'https://prismic-io.s3.amazonaws.com'
+				],
+				'style-src': ['self', 'https://fonts.googleapis.com', 'https://heapanalytics.com'],
+				'font-src': [
+					'self',
+					'https://fonts.gstatic.com',
+					'https://heapanalytics.com',
+					'https://*.auryc.com'
+				],
 				'connect-src': ['self', 'https://heapanalytics.com', 'https://*.auryc.com'],
 				'worker-src': ['self', 'blob:']
 			}

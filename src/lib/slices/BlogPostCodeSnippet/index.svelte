@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Content } from '@prismicio/client';
+	// import Copy from 'bootstrap-icons/icons/copy.svg?component';
 	import Highlight, { LineNumbers } from 'svelte-highlight';
 	import type { LanguageType } from 'svelte-highlight/languages';
 	import java from 'svelte-highlight/languages/java';
@@ -8,6 +9,7 @@
 	import shell from 'svelte-highlight/languages/shell';
 	import typescript from 'svelte-highlight/languages/typescript';
 	import yaml from 'svelte-highlight/languages/yaml';
+	// import { writable } from 'svelte/store';
 
 	export let slice: Content.CodeBlockSlice;
 	// prismic props https://prismic.io/docs/svelte-template#slices
@@ -42,10 +44,30 @@
 			language = shell;
 			break;
 	}
+
+	// const codeWasCopied = writable(false);
+
+	// function copyCode() {
+	// 	navigator.clipboard.writeText(code);
+	// 	codeWasCopied.set(true);
+	// 	setTimeout(() => {
+	// 		codeWasCopied.set(false);
+	// 	}, 1000);
+	// }
 </script>
 
-<section data-slice-type={slice.slice_type} data-slice-variation={slice.variation} class="mb-3">
-	<Highlight {code} {language} langtag let:highlighted>
+<section
+	data-slice-type={slice.slice_type}
+	data-slice-variation={slice.variation}
+	class="position-relative mb-3"
+>
+	<!-- <div class="position-absolute top-0 end-0 mt-2 me-2">
+		<button on:click={copyCode} class="btn btn-outline-secondary">
+			<Copy />
+			{$codeWasCopied ? 'Copied!' : 'Copy'}
+		</button>
+	</div> -->
+	<Highlight {code} {language} let:highlighted>
 		<LineNumbers {highlighted} hideBorder />
 	</Highlight>
 </section>

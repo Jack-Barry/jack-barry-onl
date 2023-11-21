@@ -67,7 +67,7 @@ async function getBlogPosts(
 	client: Client<AllDocumentTypes>,
 	options: ApiPrismicGetBlogPostsOptions
 ) {
-	const { page, searchTerm, tags, graphQuery } = options;
+	const { pageNumber: page, searchTerm, tags, graphQuery } = options;
 
 	const filters: string[] = [];
 

@@ -1,7 +1,31 @@
-$utilities: map-merge($utilities,
-		(height: map-merge(map-get($utilities, 'height'),
-				(values: map-merge(map-get(map-get($utilities, 'height'), 'values'),
-						(main-content: calc(100vh - (map-get($spacers, 3) * 6)))))),
-			max-width: map-merge(map-get($utilities, 'max-width'),
-				(values: map-merge(map-get(map-get($utilities, 'max-width'), 'values'),
-						(main-content: map-get($grid-breakpoints, 'lg')))))));
+$utilities: map-merge(
+	$utilities,
+	(
+		height:
+			map-merge(
+				map-get($utilities, 'height'),
+				(
+					values:
+						map-merge(
+							map-get(map-get($utilities, 'height'), 'values'),
+							(
+								main-content: calc(100vh - (map-get($spacers, 3) * 6))
+							)
+						)
+				)
+			),
+		max-width:
+			map-merge(
+				map-get($utilities, 'max-width'),
+				(
+					values:
+						map-merge(
+							map-get(map-get($utilities, 'max-width'), 'values'),
+							(
+								main-content: map-get($grid-breakpoints, 'lg')
+							)
+						)
+				)
+			)
+	)
+);

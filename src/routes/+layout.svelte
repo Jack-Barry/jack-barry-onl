@@ -13,7 +13,6 @@
 	import Breadcrumbs from '$lib/components/layout/Navbar.svelte';
 	import PrivacyPolicyModal from '$lib/components/content/PrivacyPolicyModal.svelte';
 	import { getUserThemePreference } from '$lib/utils/theme/getUserThemePreference';
-	import { userPreviouslyDeniedCookieUsage } from '$lib/utils/privacy';
 	import type { PrivacyPolicyModalContentSlice } from '../prismicio-types';
 
 	import '../scss/index.scss';
@@ -31,6 +30,10 @@
 </script>
 
 <svelte:head>
+	<script>
+		const userPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+		document.body?.dataset.bsTheme = userPrefersDark ? 'dark' : 'light';
+	</script>
 	<HeapAnalytics />
 	{#if darkTheme}
 		{@html dracula}
