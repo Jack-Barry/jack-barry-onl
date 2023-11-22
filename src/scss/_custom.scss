@@ -5,11 +5,11 @@
 	word-wrap: break-word;
 
 	// Streamline the style when inside anchors to avoid broken underline and more
-	a>& {
+	a > & {
 		color: inherit;
 	}
 }
 
-[data-slice-type='code_block']>div {
+[data-slice-type='code_block'] > div {
 	border-radius: $border-radius-lg;
 }
