@@ -4,9 +4,10 @@
 	import AboutMeSection from '$lib/components/content/AboutMeSection.svelte';
 	import BlogPostPreview from '$lib/components/content/BlogPostPreview.svelte';
 	import { readable } from 'svelte/store';
-	import { TITLE_PREFIX } from '$lib/utils/titles';
 	import type { TagObject } from '$lib/components/content/types.js';
 	import { goto } from '$app/navigation';
+	import HeadMetadata from '$lib/components/metadata/HeadMetadata.svelte';
+	import { JACK_BARRY } from '$lib/utils/constants.js';
 
 	export let data;
 
@@ -18,10 +19,12 @@
 	}
 </script>
 
-<svelte:head>
-	<title>{TITLE_PREFIX}Professional Nerd</title>
-	<meta name="description" content="Jack Barry is a lucky guy who gets paid to be a nerd" />
-</svelte:head>
+<HeadMetadata
+	siteTitle="Home"
+	ogImageTitle={JACK_BARRY}
+	ogImageSubtitle="Professional Nerd"
+	description="Jack Barry is a lucky guy who gets paid to be a nerd"
+/>
 
 <div class="animate__animated animate__pulse animate__delay-1s">
 	<BlogPostPreview post={data.latestPost} {activeTags} onTagClick={filterByTag} withIcon />

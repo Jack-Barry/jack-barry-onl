@@ -2,15 +2,19 @@
 	import { SliceZone } from '@prismicio/svelte';
 	import { components } from '$lib/slices';
 	import { formattedDate } from '$lib/utils/dates';
-	import { TITLE_PREFIX } from '$lib/utils/titles';
+	import { BY_JACK_BARRY, SITE_TITLE_PREFIX } from '$lib/utils/constants.js';
+	import HeadMetadata from '$lib/components/metadata/HeadMetadata.svelte';
 
 	export let data;
 </script>
 
-<svelte:head>
-	<title>{TITLE_PREFIX}{data.blogPost.data.meta_title}</title>
-	<meta name="description" content={data.blogPost.data.meta_description} />
-</svelte:head>
+<HeadMetadata
+	siteTitle={`${data.blogPost.data.meta_title}`}
+	ogImageSubtitle={BY_JACK_BARRY}
+	description={`${data.blogPost.data.meta_description}`}
+	publishDate={data.blogPost.first_publication_date}
+	modifiedDate={data.blogPost.last_publication_date}
+/>
 
 <h1>{data.blogPost.data.meta_title}</h1>
 <div class="d-flex flex-column gap-2">

@@ -13,11 +13,12 @@
 	import LoadingEllipsis from '$lib/components/LoadingEllipsis.svelte';
 	import TransitionContainer from '$lib/components/layout/TransitionContainer.svelte';
 	import type { TagObject } from '$lib/components/content/types.js';
-	import { TITLE_PREFIX } from '$lib/utils/titles';
+	import { BY_JACK_BARRY, SITE_TITLE_PREFIX } from '$lib/utils/constants.js';
 	import type { BlogPostDocument } from '../../../prismicio-types.js';
 	import { page } from '$app/stores';
 	import { applyParamsToUrl } from '$lib/utils/searchParams.js';
 	import { BlogPostSearchParams } from '$lib/api/common/prismic/BlogPostSearchParams.js';
+	import HeadMetadata from '$lib/components/metadata/HeadMetadata.svelte';
 
 	export let data;
 
@@ -95,10 +96,12 @@
 	);
 </script>
 
-<svelte:head>
-	<title>{TITLE_PREFIX}Blog</title>
-	<meta name="description" content="Blog posts by Jack Barry" />
-</svelte:head>
+<HeadMetadata
+	siteTitle="Blog"
+	ogImageTitle="Blog Posts"
+	ogImageSubtitle={BY_JACK_BARRY}
+	description="Blog posts by Jack Barry"
+/>
 
 <div class="d-flex flex-column flex-sm-row align-items-sm-center justify-content-sm-between mb-2">
 	<h1>Blog</h1>

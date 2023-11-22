@@ -3,15 +3,19 @@
 	import ArrowRight from 'bootstrap-icons/icons/arrow-right.svg?component';
 
 	import JbLogoSvg from '$lib/assets/jb-logo.svg?component';
+	import HeadMetadata from '$lib/components/metadata/HeadMetadata.svelte';
+	import { JACK_BARRY } from '$lib/utils/constants';
 
 	export let data;
 	const { data: homePage } = data.homePage;
 </script>
 
-<svelte:head>
-	<title>{homePage.meta_title}</title>
-	<meta name="description" content={homePage.meta_description} />
-</svelte:head>
+<HeadMetadata
+	siteTitle={`${homePage.meta_title}`}
+	ogImageTitle={JACK_BARRY}
+	ogImageSubtitle={`${homePage.meta_title}`}
+	description={`${homePage.meta_description}`}
+/>
 
 <div class="h-main-content vw-100 p-2 d-flex flex-column justify-content-center">
 	<div class="d-flex align-items-center justify-content-center">
