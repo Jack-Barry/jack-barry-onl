@@ -8,13 +8,14 @@
 	import { goto } from '$app/navigation';
 	import HeadMetadata from '$lib/components/metadata/HeadMetadata.svelte';
 	import { JACK_BARRY } from '$lib/utils/constants.js';
+	import { BlogPostSearchParams } from '$lib/api/common/prismic/BlogPostSearchParams.js';
 
 	export let data;
 
 	const activeTags = readable(data.allTags);
 
 	function filterByTag(tag: TagObject) {
-		const searchParams = new URLSearchParams({ tag: tag.tag });
+		const searchParams = new BlogPostSearchParams().setTags([tag.tag]).asURLSearchParams;
 		goto('/blog?' + searchParams.toString());
 	}
 </script>

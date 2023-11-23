@@ -46,6 +46,7 @@ export class BlogPostSearchParams {
 	/** Updates page number value in search params */
 	public setPageNumber(pageNumber = 1) {
 		this._searchParams.set(BlogPostSearchParams.PARAM_KEY_PAGE_NUMBER, pageNumber.toString());
+		return this;
 	}
 
 	/** Updates search term value in search params */
@@ -55,6 +56,7 @@ export class BlogPostSearchParams {
 		} else {
 			this._searchParams.delete(BlogPostSearchParams.PARAM_KEY_SEARCH_TERM);
 		}
+		return this;
 	}
 
 	/** Updates tag value(s) in search params */
@@ -63,6 +65,7 @@ export class BlogPostSearchParams {
 		tags.forEach((t) => {
 			this._searchParams.append(BlogPostSearchParams.PARAM_KEY_TAGS, t);
 		});
+		return this;
 	}
 
 	/** Updates previews only value in search params */
@@ -72,6 +75,7 @@ export class BlogPostSearchParams {
 		} else {
 			this._searchParams.delete(BlogPostSearchParams.PARAM_KEY_PREVIEWS_ONLY);
 		}
+		return this;
 	}
 
 	/** Translates search params into options object that can be consumed by API */
