@@ -1,4 +1,4 @@
-import type { Page } from '@playwright/test';
+import { expect, type Page } from '@playwright/test';
 import { BasePage } from './BasePage';
 
 export class LandingPage extends BasePage {
@@ -10,6 +10,7 @@ export class LandingPage extends BasePage {
 
 	async goto() {
 		await this.page.goto(LandingPage.URL);
+		await expect(this.page).toHaveURL(LandingPage.URL);
 	}
 
 	readonly buttons = {

@@ -1,4 +1,4 @@
-import type { Page } from '@playwright/test';
+import { expect, type Page } from '@playwright/test';
 import { BasePage } from './BasePage';
 
 export class PrivacyPolicyPage extends BasePage {
@@ -10,5 +10,6 @@ export class PrivacyPolicyPage extends BasePage {
 
 	async goto() {
 		await this.page.goto(PrivacyPolicyPage.URL);
+		await expect(this.page).toHaveURL(PrivacyPolicyPage.URL);
 	}
 }

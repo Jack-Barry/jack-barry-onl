@@ -3,12 +3,25 @@
 	import PrivacyPolicy from '$lib/slices/PrivacyPolicy/index.svelte';
 	import { JACK_BARRY } from '$lib/utils/constants.js';
 	import { formattedDate } from '$lib/utils/dates.js';
+	import {
+		consentToCookieUsage,
+		userPreviouslyConsentedToCookieUsage,
+		userPreviouslyDeniedCookieUsage
+	} from '$lib/utils/privacy.js';
 	import type { PrivacyPolicySlice } from '../../../prismicio-types.js';
 
 	export let data;
 
 	const { privacyPolicy } = data;
 	const slice = privacyPolicy.data.slices[1] as PrivacyPolicySlice;
+
+	/**
+	 * If user hasn't denied or consented before and lands on this page, consider
+	 *   it as consenting to cookies usage
+	 */
+	if (!userPreviouslyDeniedCookieUsage() && !userPreviouslyConsentedToCookieUsage()) {
+		consentToCookieUsage();
+	}
 </script>
 
 <HeadMetadata

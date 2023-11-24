@@ -11,6 +11,7 @@ export class HomePage extends BasePage {
 
 	async goto() {
 		await this.page.goto(HomePage.URL);
+		await expect(this.page).toHaveURL(HomePage.URL);
 	}
 
 	async assertHasExpectedBreadcrumbs() {

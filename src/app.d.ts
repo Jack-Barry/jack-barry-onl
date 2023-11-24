@@ -9,11 +9,13 @@ declare global {
 		// interface Error {}
 		// interface Locals {}
 		interface PageData {
+			/** App was build with `IS_TEST` environment variable set to `true` */
+			isTestEnv: boolean;
+			/** Breadcrumb data used for a route */
 			breadcrumbs?: BreadcrumbConfig[];
 		}
 		// interface Platform {}
 	}
 }
 
-export { };
-
+export {};

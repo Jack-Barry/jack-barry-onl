@@ -1,9 +1,14 @@
-import { apiPrismic } from '$lib/api/server/prismic.js'
+import { IS_TEST } from '$env/static/private';
+import { apiPrismic } from '$lib/api/server/prismic.js';
 
-export const prerender = true
+export const prerender = true;
 
 export const load = async ({ fetch }) => {
-  const privacyPolicy = await apiPrismic({ fetch }).privacyPolicy.get()
+	const isTestEnv = IS_TEST.toLowerCase() === 'true';
+	const privacyPolicy = await apiPrismic({ fetch }).privacyPolicy.get();
 
-  return { privacyPolicy }
-}
+	return {
+		isTestEnv,
+		privacyPolicy
+	};
+};

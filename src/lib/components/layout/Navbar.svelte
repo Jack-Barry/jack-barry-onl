@@ -4,7 +4,7 @@
 	import { page } from '$app/stores';
 	import JbLogoSvg from '$lib/assets/jb-logo.svg?component';
 
-	const breadcrumbs = $page.data?.breadcrumbs || [];
+	$: breadcrumbs = $page.data?.breadcrumbs || [];
 </script>
 
 {#if breadcrumbs}

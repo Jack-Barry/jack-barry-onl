@@ -16,7 +16,7 @@ export async function assertHasPrivacyPolicyLink(pageInstance: BasePage) {
 	await pageInstance.privacyPolicyLink.click();
 	await expect(pageInstance.page).toHaveURL(PrivacyPolicyPage.URL);
 
-	const items = pageInstance.breadcrumbItems;
+	const items = new PrivacyPolicyPage(pageInstance.page).breadcrumbItems;
 	expect(await items.count()).toBe(2);
 	const firstItem = items.first();
 	expect(await firstItem.innerText()).toBe('Home');

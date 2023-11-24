@@ -8,18 +8,29 @@
 	import { writable } from 'svelte/store';
 	import type { PrivacyPolicyModalContentSlice } from '../../../prismicio-types';
 	import Modal from '../bootstrap/Modal.svelte';
+	import { page } from '$app/stores';
 
 	export let privacyPolicyContent: PrivacyPolicyModalContentSlice;
 	let modalComponent: Modal;
 
 	const hasAcknowledged = writable(true);
-	// give the user a couple seconds to land before popping the cookie consent modal
-	const popupTimer = setTimeout(() => {
-		hasAcknowledged.set(
-			!!(userPreviouslyConsentedToCookieUsage() || userPreviouslyDeniedCookieUsage())
+	/**
+	 * If user lands on privacy policy page directly, don't bother them with the
+	 *   modal pop-up, they're already looking at the relevant info
+	 */
+	const shouldPresentModal = $page.route.id !== '/(app)/privacy-policy';
+	if (shouldPresentModal) {
+		// give the user a couple seconds to land before popping the cookie consent modal
+		const popupTimer = setTimeout(
+			() => {
+				hasAcknowledged.set(
+					!!(userPreviouslyConsentedToCookieUsage() || userPreviouslyDeniedCookieUsage())
+				);
+				clearTimeout(popupTimer);
+			},
+			$page.data.isTestEnv ? 500 : 2000
 		);
-		clearTimeout(popupTimer);
-	}, 2000);
+	}
 
 	function acknowledge() {
 		consentToCookieUsage();
