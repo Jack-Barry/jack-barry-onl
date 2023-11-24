@@ -16,17 +16,19 @@
 	modifiedDate={data.blogPost.last_publication_date}
 />
 
-<h1>{data.blogPost.data.meta_title}</h1>
-<div class="d-flex flex-column gap-2">
-	<p class="mb-0">{formattedDate(data.blogPost.first_publication_date)}</p>
-	{#if data.blogPost.last_publication_date !== data.blogPost.first_publication_date}
-		<p class="text-secondary fs-fine-print">
-			Last edited: {formattedDate(data.blogPost.last_publication_date)}
-		</p>
-	{/if}
-</div>
-<hr class="mt-0" />
-<SliceZone slices={data.blogPost.data.body} {components} />
+<article>
+	<h1>{data.blogPost.data.meta_title}</h1>
+	<div class="d-flex flex-column gap-2">
+		<p class="mb-0">{formattedDate(data.blogPost.first_publication_date)}</p>
+		{#if data.blogPost.last_publication_date !== data.blogPost.first_publication_date}
+			<p class="text-secondary fs-fine-print">
+				Last edited: {formattedDate(data.blogPost.last_publication_date)}
+			</p>
+		{/if}
+	</div>
+	<hr class="mt-0" />
+	<SliceZone slices={data.blogPost.data.body} {components} />
+</article>
 <hr />
 <!-- <div class="d-flex gap-2 align-items-center">
 	<span>If you found this article useful, feel free to</span>

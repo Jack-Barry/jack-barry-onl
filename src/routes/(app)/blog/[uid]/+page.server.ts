@@ -3,6 +3,7 @@ import { apiPrismic } from '$lib/api/server/prismic.js';
 import type { EntryGenerator } from './$types.js';
 
 export const prerender = true;
+export const csr = false;
 
 export const entries: EntryGenerator = async () => {
 	const allPosts = await apiPrismic({ fetch }).blogPosts.getAll({

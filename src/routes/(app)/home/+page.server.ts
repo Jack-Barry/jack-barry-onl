@@ -1,6 +1,7 @@
 import { apiPrismic } from '$lib/api/server/prismic.js';
 
 export const prerender = true;
+export const csr = false;
 
 export async function load({ fetch, parent }) {
 	const { allTags, breadcrumbs } = await parent();
