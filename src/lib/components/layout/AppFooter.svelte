@@ -5,12 +5,17 @@
 	import LinkedinSvg from 'bootstrap-icons/icons/linkedin.svg?component';
 	import RedditSvg from 'bootstrap-icons/icons/reddit.svg?component';
 	import StackOverflowSvg from 'bootstrap-icons/icons/stack-overflow.svg?component';
+	import type { ComponentType, SvelteComponent } from 'svelte';
+	import type { SVGAttributes } from 'svelte/elements';
 	import { scale } from 'svelte/transition';
 
 	import { page } from '$app/stores';
 	import SocialLink from './SocialLink.svelte';
 
-	let socialIcons = [
+	const socialIcons: {
+		Icon: ComponentType<SvelteComponent<SVGAttributes<SVGSVGElement>, any, any>>;
+		href: string;
+	}[] = [
 		{ Icon: LinkedinSvg, href: 'https://www.linkedin.com/in/jackbarryonl/' },
 		{ Icon: GithubSvg, href: 'https://github.com/Jack-Barry' },
 		{ Icon: StackOverflowSvg, href: 'https://stackoverflow.com/users/5072076/jack-barry' },
@@ -25,7 +30,8 @@
 <div class="bg-body shadow vw-100 fixed-bottom" class:pt-4={!isLandingPage}>
 	<div class="d-flex flex-column align-items-center gap-1">
 		{#if !isLandingPage}
-			<div transition:scale class="mx-3 mx-sm-auto d-flex gap-2 align-items-center">
+			<!-- <div transition:scale class="mx-3 mx-sm-auto d-flex gap-2 align-items-center"> -->
+			<div class="mx-3 mx-sm-auto d-flex gap-2 align-items-center">
 				<ul class="list-unstyled d-flex gap-5 mb-0 flex-wrap align-items-center">
 					{#each socialIcons as socialIcon (socialIcon.href)}
 						<li>

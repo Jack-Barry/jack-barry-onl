@@ -2,9 +2,6 @@
 	import { QueryClientProvider } from '@tanstack/svelte-query';
 	import { SvelteQueryDevtools } from '@tanstack/svelte-query-devtools';
 	import { blur } from 'svelte/transition';
-	// code snippet styles
-	import dracula from 'svelte-highlight/styles/dracula';
-	import solarizedLight from 'svelte-highlight/styles/solarized-light';
 
 	import { browser } from '$app/environment';
 	import { page } from '$app/stores';
@@ -19,10 +16,8 @@
 
 	export let data;
 
-	let darkTheme: boolean;
 	if (browser) {
-		const { userPrefersDark } = getUserThemePreference();
-		darkTheme = userPrefersDark;
+		getUserThemePreference();
 	}
 
 	const privacyPolicyModalSlice = data.privacyPolicy.data
@@ -30,24 +25,15 @@
 </script>
 
 <svelte:head>
-	<script>
-		const userPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-		document.body?.dataset.bsTheme = userPrefersDark ? 'dark' : 'light';
-	</script>
 	<HeapAnalytics />
-	{#if darkTheme}
-		{@html dracula}
-	{:else}
-		{@html solarizedLight}
-	{/if}
 </svelte:head>
 
 <QueryClientProvider client={data.queryClient}>
 	<Breadcrumbs />
-	{#key $page.route.id}
-		<div in:blur={{ delay: 400 }}>
-			<slot />
-		</div>
+	{#key $page.route?.id}
+		<!-- <div in:blur={{ delay: 400 }}> -->
+		<slot />
+		<!-- </div> -->
 	{/key}
 	<AppFooter />
 	<PrivacyPolicyModal privacyPolicyContent={privacyPolicyModalSlice} />

@@ -38,6 +38,7 @@
 				)
 					heap[p[o]] = n(p[o]);
 			});
+
 		if (userAllowsAnalytics) {
 			heap.load(PUBLIC_HEAP_ID, { secureCookie: true });
 		}

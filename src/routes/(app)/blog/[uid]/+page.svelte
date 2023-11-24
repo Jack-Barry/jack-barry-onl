@@ -27,3 +27,15 @@
 </div>
 <hr class="mt-0" />
 <SliceZone slices={data.blogPost.data.body} {components} />
+<hr />
+<!-- <div class="d-flex gap-2 align-items-center">
+	<span>If you found this article useful, feel free to</span>
+	<a href="https://ko-fi.com/B0B3QXRUV" target="_blank">
+		<img
+			height="36"
+			style="border:0px;height:36px;"
+			src="https://storage.ko-fi.com/cdn/kofi2.png?v=3"
+			alt="buy me a drink"
+		/>
+	</a>
+</div> -->

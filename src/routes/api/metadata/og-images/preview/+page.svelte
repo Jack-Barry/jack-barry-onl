@@ -12,7 +12,11 @@
 </script>
 
 <div class="vh-100 vw-100 d-flex align-items-center justify-content-center">
-	<div style="width: {imageDimensions.width}px; height: {imageDimensions.height}px;">
+	<div
+		class="image-wrapper"
+		style:width={`${imageDimensions.width}px`}
+		style:height={`${imageDimensions.height}px`}
+	>
 		<OgImage {title} {subtitle} />
 	</div>
 </div>

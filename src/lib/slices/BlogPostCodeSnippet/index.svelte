@@ -1,16 +1,33 @@
-<script lang="ts">
+<script context="module" lang="ts">
 	import type { Content } from '@prismicio/client';
-	// import Copy from 'bootstrap-icons/icons/copy.svg?component';
-	import Highlight, { LineNumbers } from 'svelte-highlight';
-	import type { LanguageType } from 'svelte-highlight/languages';
-	import java from 'svelte-highlight/languages/java';
-	import javascript from 'svelte-highlight/languages/javascript';
-	import powershell from 'svelte-highlight/languages/powershell';
-	import shell from 'svelte-highlight/languages/shell';
-	import typescript from 'svelte-highlight/languages/typescript';
-	import yaml from 'svelte-highlight/languages/yaml';
-	// import { writable } from 'svelte/store';
+	import CopySvg from 'bootstrap-icons/icons/clipboard.svg?component';
+	import CopiedSvg from 'bootstrap-icons/icons/clipboard-check.svg?component';
+	import { writable } from 'svelte/store';
 
+	import hljs, { type LanguageFn } from 'highlight.js';
+	// Begin supported langs
+	import java from 'highlight.js/lib/languages/java';
+	import javascript from 'highlight.js/lib/languages/javascript';
+	import powershell from 'highlight.js/lib/languages/powershell';
+	import shell from 'highlight.js/lib/languages/shell';
+	import typescript from 'highlight.js/lib/languages/typescript';
+	import yaml from 'highlight.js/lib/languages/yaml';
+	// End supported langs
+
+	import { browser } from '$app/environment';
+	import { getUserThemePreference } from '$lib/utils/theme/getUserThemePreference';
+
+	if (browser) {
+		const { userPrefersDark } = getUserThemePreference();
+		if (userPrefersDark) {
+			import('highlight.js/styles/atom-one-dark.min.css');
+		} else {
+			import('highlight.js/styles/atom-one-light.min.css');
+		}
+	}
+</script>
+
+<script lang="ts">
 	export let slice: Content.CodeBlockSlice;
 	// prismic props https://prismic.io/docs/svelte-template#slices
 	export let slices;
@@ -20,40 +37,46 @@
 	export let index;
 	index;
 
-	const lang = slice.primary.language;
+	const lang = slice.primary.language || 'shell';
 	const code = (slice.primary.code[0] as { text: string }).text;
-	let language: LanguageType<string>;
+	let langFn: LanguageFn;
 	switch (lang) {
 		case 'java':
-			language = java;
+			langFn = java;
 			break;
 		case 'javascript':
-			language = javascript;
+			langFn = javascript;
 			break;
 		case 'powershell':
-			language = powershell;
+			langFn = powershell;
 			break;
 		case 'typescript':
-			language = typescript;
+			langFn = typescript;
 			break;
 		case 'yaml':
-			language = yaml;
+			langFn = yaml;
 			break;
 		case 'shell':
 		default:
-			language = shell;
+			langFn = shell;
 			break;
 	}
 
-	// const codeWasCopied = writable(false);
+	if (!hljs.getLanguage(lang)) {
+		hljs.registerLanguage(lang, langFn);
+	}
 
-	// function copyCode() {
-	// 	navigator.clipboard.writeText(code);
-	// 	codeWasCopied.set(true);
-	// 	setTimeout(() => {
-	// 		codeWasCopied.set(false);
-	// 	}, 1000);
-	// }
+	const codeWasCopied = writable(false);
+
+	function copyCode() {
+		navigator.clipboard.writeText(code);
+		codeWasCopied.set(true);
+		setTimeout(() => {
+			codeWasCopied.set(false);
+		}, 2000);
+	}
+
+	const highlighted = hljs.highlight(code, { language: lang }).value;
 </script>
 
 <section
@@ -61,13 +84,22 @@
 	data-slice-variation={slice.variation}
 	class="position-relative mb-3"
 >
-	<!-- <div class="position-absolute top-0 end-0 mt-2 me-2">
+	<div class="position-absolute top-0 end-0 mt-2 me-2">
 		<button on:click={copyCode} class="btn btn-outline-secondary">
-			<Copy />
-			{$codeWasCopied ? 'Copied!' : 'Copy'}
+			{#if $codeWasCopied}
+				<CopiedSvg />
+			{:else}
+				<CopySvg />
+			{/if}
 		</button>
-	</div> -->
-	<Highlight {code} {language} let:highlighted>
-		<LineNumbers {highlighted} hideBorder />
-	</Highlight>
+	</div>
+	<pre data-language={lang}><code class="hljs rounded">{@html highlighted}</code></pre>
 </section>
+
+<style>
+	@media (max-width: 767.98px) {
+		code.hljs {
+			padding-top: 3rem;
+		}
+	}
+</style>

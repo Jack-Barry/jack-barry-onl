@@ -122,8 +122,17 @@
 			{/if}
 		</button>
 		{#if $showFilter}
-			<button
+			<!-- <button
 				transition:scale
+				type="button"
+				class="btn btn-outline-danger order-sm-first"
+				disabled={!$filtersActive}
+				on:click={() => {
+					liveSearchTerm.set('');
+					toggleAllTags(false);
+				}}
+			> -->
+			<button
 				type="button"
 				class="btn btn-outline-danger order-sm-first"
 				disabled={!$filtersActive}
@@ -138,52 +147,52 @@
 	</div>
 </div>
 {#if $showFilter}
-	<div transition:scale class="mb-3">
-		<div class="form-floating mb-3">
-			<input
-				type="search"
-				class="form-control"
-				id="searchInput"
-				placeholder="Search"
-				bind:value={$liveSearchTerm}
-			/>
-			<label for="floatingInput">Search</label>
-		</div>
-		<div>
-			<header>Filter by tag:</header>
-			<div class="d-flex align-items-start gap-2 flex-column flex-sm-row">
+	<!-- <div transition:scale class="mb-3"> -->
+	<div class="form-floating mb-3">
+		<input
+			type="search"
+			class="form-control"
+			id="searchInput"
+			placeholder="Search"
+			bind:value={$liveSearchTerm}
+		/>
+		<label for="floatingInput">Search</label>
+	</div>
+	<div>
+		<header>Filter by tag:</header>
+		<div class="d-flex align-items-start gap-2 flex-column flex-sm-row">
+			<div>
+				<TagsList tags={$tags} onClick={toggleTag} />
+			</div>
+			<div class="flex-fill d-flex flex-row flex-sm-column gap-1">
 				<div>
-					<TagsList tags={$tags} onClick={toggleTag} />
+					<button
+						type="button"
+						class="btn btn-outline-success btn-sm text-nowrap"
+						disabled={$ratioTagsSelected === 1}
+						on:click={() => {
+							toggleAllTags(true);
+						}}
+					>
+						<EnableAllIcon /> Enable all tags
+					</button>
 				</div>
-				<div class="flex-fill d-flex flex-row flex-sm-column gap-1">
-					<div>
-						<button
-							type="button"
-							class="btn btn-outline-success btn-sm text-nowrap"
-							disabled={$ratioTagsSelected === 1}
-							on:click={() => {
-								toggleAllTags(true);
-							}}
-						>
-							<EnableAllIcon /> Enable all tags
-						</button>
-					</div>
-					<div>
-						<button
-							type="button"
-							class="btn btn-outline-danger btn-sm text-nowrap"
-							disabled={$ratioTagsSelected === 0}
-							on:click={() => {
-								toggleAllTags(false);
-							}}
-						>
-							<ClearIcon /> Clear all tags
-						</button>
-					</div>
+				<div>
+					<button
+						type="button"
+						class="btn btn-outline-danger btn-sm text-nowrap"
+						disabled={$ratioTagsSelected === 0}
+						on:click={() => {
+							toggleAllTags(false);
+						}}
+					>
+						<ClearIcon /> Clear all tags
+					</button>
 				</div>
 			</div>
 		</div>
 	</div>
+	<!-- </div> -->
 	<hr />
 {/if}
 <TransitionContainer>
@@ -206,9 +215,9 @@
 			<div>{JSON.stringify($query.error.message)}</div>
 		{:else if $posts?.length}
 			{#each $posts || [] as post (post.uid)}
-				<div transition:fly class="d-flex flex-column gap-3">
-					<BlogPostPreview {post} activeTags={selectedTags} onTagClick={toggleTag} />
-				</div>
+				<!-- <div transition:fly class="d-flex flex-column gap-3"> -->
+				<BlogPostPreview {post} activeTags={selectedTags} onTagClick={toggleTag} />
+				<!-- </div> -->
 			{/each}
 			<button
 				class="btn btn-outline-primary"
@@ -226,9 +235,9 @@
 				{/if}
 			</button>
 		{:else}
-			<div transition:fly class="alert alert-warning" role="alert">
-				No posts match the current filters
-			</div>
+			<!-- <div transition:fly class="alert alert-warning" role="alert"> -->
+			No posts match the current filters
+			<!-- </div> -->
 		{/if}
 	</div></TransitionContainer
 >

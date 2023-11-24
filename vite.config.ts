@@ -8,11 +8,16 @@ import { defineConfig } from 'vitest/config';
 export default defineConfig({
 	plugins: [sveltekit(), svg(), rawFonts(['.ttf'])],
 
+	build: {
+		sourcemap: true
+	},
+
 	test: {
 		include: ['src/**/*.{test,spec}.{js,ts}']
 	}
 });
 
+/** Allows fonts to be used for social media image generation */
 function rawFonts(ext: string[]) {
 	return {
 		name: 'vite-plugin-raw-fonts',

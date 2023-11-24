@@ -1,5 +1,5 @@
 export function getUserThemePreference() {
-  const userPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-  document.body.dataset.bsTheme = userPrefersDark ? 'dark' : 'light'
-  return { userPrefersDark }
+	const userPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+	document.body.dataset.bsTheme = userPrefersDark ? 'dark' : 'light';
+	return { userPrefersDark };
 }
