@@ -1,8 +1,8 @@
-import { LOCAL_STORAGE_KEY_COOKIES_CONSENT } from '../../../src/lib/utils/storage/constants';
-import { test, expect } from '../extend';
-import { HomePage } from '../pages/HomePage';
-import { PrivacyPolicyPage } from '../pages/PrivacyPolicy';
-import { assertHasPrivacyPolicyLink } from '../utils/privacyPolicy';
+import { LOCAL_STORAGE_KEY_COOKIES_CONSENT } from '../../../../src/lib/utils/storage/constants';
+import { test, expect } from '../../extend';
+import { HomePage } from '../../pages/HomePage';
+import { PrivacyPolicyPage } from '../../pages/PrivacyPolicy';
+import { assertHasPrivacyPolicyLink } from '../../utils/privacyPolicy';
 
 test('shows no breadcrumbs', async ({ _landingPage }) => {
 	await _landingPage.goto();

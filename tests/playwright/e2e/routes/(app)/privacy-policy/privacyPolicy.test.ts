@@ -1,9 +1,9 @@
-import { pause } from '../../../src/lib/utils/pause';
+import { pause } from '../../../../../../src/lib/utils/pause';
 import {
 	LOCAL_STORAGE_KEY_COOKIES_CONSENT,
 	LOCAL_STORAGE_KEY_COOKIES_DENY
-} from '../../../src/lib/utils/storage/constants';
-import { expect, test } from '../extend';
+} from '../../../../../../src/lib/utils/storage/constants';
+import { expect, test } from '../../../../extend';
 
 test('does not prompt user for cookies consent if navigated to directly', async ({
 	_privacyPolicyPage

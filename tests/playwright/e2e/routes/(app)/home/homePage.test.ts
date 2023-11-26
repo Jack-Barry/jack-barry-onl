@@ -1,4 +1,4 @@
-import { test } from '../extend';
+import { test } from '../../../../extend';
 
 test('renders expected breadcrumbs', async ({ _homePage }) => {
 	await _homePage.goto();
