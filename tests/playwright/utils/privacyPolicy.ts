@@ -1,8 +1,8 @@
-import { expect } from '@playwright/test';
+import { expect } from '../extend';
 import type { BasePage } from '../pages/BasePage';
+import { HomePage } from '../pages/HomePage';
 import { PrivacyPolicyPage } from '../pages/PrivacyPolicy';
 import { assertIsActiveBreadcrumb, assertIsInactiveBreadcrumb } from './breadcrumb';
-import { HomePage } from '../pages/HomePage';
 
 /**
  * Asserts that the page has a working link to the privacy policy page
@@ -16,7 +16,9 @@ export async function assertHasPrivacyPolicyLink(pageInstance: BasePage) {
 	await pageInstance.privacyPolicyLink.click();
 	await expect(pageInstance.page).toHaveURL(PrivacyPolicyPage.URL);
 
-	const items = new PrivacyPolicyPage(pageInstance.page).breadcrumbItems;
+	const privacyPolicyPage = new PrivacyPolicyPage(pageInstance.page);
+	await expect(privacyPolicyPage.page).toHaveURL(PrivacyPolicyPage.URL);
+	const items = privacyPolicyPage.breadcrumbItems;
 	expect(await items.count()).toBe(2);
 	const firstItem = items.first();
 	expect(await firstItem.innerText()).toBe('Home');

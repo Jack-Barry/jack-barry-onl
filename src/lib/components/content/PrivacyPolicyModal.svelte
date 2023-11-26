@@ -46,7 +46,13 @@
 >
 	<div class="modal-header">
 		<h5 class="modal-title">Obligatory Cookies Disclosure</h5>
-		<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		<button
+			type="button"
+			class="btn-close"
+			data-bs-dismiss="modal"
+			aria-label="Close"
+			on:click={acknowledge}
+		/>
 	</div>
 	<div class="modal-body">
 		<PrivacyPolicyModalContent slice={privacyPolicyContent} {modalComponent} />

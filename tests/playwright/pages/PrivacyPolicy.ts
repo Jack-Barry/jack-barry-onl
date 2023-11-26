@@ -12,4 +12,8 @@ export class PrivacyPolicyPage extends BasePage {
 		await this.page.goto(PrivacyPolicyPage.URL);
 		await expect(this.page).toHaveURL(PrivacyPolicyPage.URL);
 	}
+
+	get toggleAllowAnalyticsTracking() {
+		return this.page.getByLabel('Allow anonymous analytics tracking');
+	}
 }

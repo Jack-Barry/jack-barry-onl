@@ -3,7 +3,7 @@ import { HomePage } from './pages/HomePage';
 import { LandingPage } from './pages/LandingPage';
 import { PrivacyPolicyPage } from './pages/PrivacyPolicy';
 
-type PlaywrightFixtures = {
+export type PlaywrightFixtures = {
 	_homePage: HomePage;
 	_landingPage: LandingPage;
 	_privacyPolicyPage: PrivacyPolicyPage;
@@ -12,14 +12,19 @@ type PlaywrightFixtures = {
 export const test = base.extend<PlaywrightFixtures>({
 	_homePage: async ({ page }, use) => {
 		const customPage = new HomePage(page);
+		await customPage.init();
 		await use(customPage);
 	},
+
 	_landingPage: async ({ page }, use) => {
 		const customPage = new LandingPage(page);
+		await customPage.init();
 		await use(customPage);
 	},
+
 	_privacyPolicyPage: async ({ page }, use) => {
 		const customPage = new PrivacyPolicyPage(page);
+		await customPage.init();
 		await use(customPage);
 	}
 });

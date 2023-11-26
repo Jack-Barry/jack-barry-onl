@@ -1,10 +1,11 @@
 import { browser } from '$app/environment';
 import { checkUserDeletionStatus, deleteUserFromHeapAnalytics } from '$lib/api/client/heap';
 import dayjs from 'dayjs';
-
-const LOCAL_STORAGE_KEY_COOKIES_CONSENT = 'user_approved_cookies_usage';
-const LOCAL_STORAGE_KEY_COOKIES_DENY = 'user_denies_cookies_usage';
-const LOCAL_STORAGE_KEY_DELETION_REQUEST_ID = 'user_analytics_deletion_request_id';
+import {
+	LOCAL_STORAGE_KEY_COOKIES_CONSENT,
+	LOCAL_STORAGE_KEY_COOKIES_DENY,
+	LOCAL_STORAGE_KEY_DELETION_REQUEST_ID
+} from './storage/constants';
 
 export function consentToCookieUsage() {
 	if (!browser) {

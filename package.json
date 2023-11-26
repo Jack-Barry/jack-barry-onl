@@ -5,6 +5,7 @@
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
+		"build:e2e": "cross-env IS_TEST=true npm run build",
 		"preview": "vite preview",
 		"test": "npm run test:integration && npm run test:unit",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
@@ -17,7 +18,7 @@
 		"slicemachine": "start-slicemachine"
 	},
 	"devDependencies": {
-		"@playwright/test": "1.39.0",
+		"@playwright/test": "1.40.0",
 		"@poppanator/sveltekit-svg": "4.1.3",
 		"@popperjs/core": "2.11.8",
 		"@resvg/resvg-js": "2.6.0",

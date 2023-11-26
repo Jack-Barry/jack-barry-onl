@@ -1,4 +1,5 @@
-<script>
+<script context="module">
+	// Base script available here: https://developers.heap.io/docs/web#base-installation
 	import { browser } from '$app/environment';
 	import { PUBLIC_HEAP_ID } from '$env/static/public';
 	import { userPreviouslyDeniedCookieUsage } from '$lib/utils/privacy';

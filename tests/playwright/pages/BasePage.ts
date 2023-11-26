@@ -1,7 +1,19 @@
-import type { Page } from '@playwright/test';
+import { expect, type Page } from '@playwright/test';
+
+import { pause } from '../../../src/lib/utils/pause';
+import { interceptHeapAnalytics } from '../interceptors/thirdParty';
+import { interceptApiHeapUserDelete } from '../interceptors/api';
+import { mockHeapAnalyticsCookie } from '../utils/heapAnalytics';
+import dayjs from 'dayjs';
 
 export class BasePage {
 	constructor(public page: Page) {}
+
+	/** Sets up basic endpoint mocks */
+	async init() {
+		await interceptHeapAnalytics(this.page);
+		await interceptApiHeapUserDelete(this.page);
+	}
 
 	get breadcrumb() {
 		return this.page.getByLabel('breadcrumb');
@@ -13,12 +25,24 @@ export class BasePage {
 		return orderedList;
 	}
 
-	get cookiesConsentModal() {
-		return this.page.locator('#cookies-consent-modal');
-	}
+	readonly cookiesConsentModal = {
+		locator: () => this.page.locator('#cookies-consent-modal'),
+		buttons: {
+			close: () => this.cookiesConsentModal.locator().getByLabel('Close'),
+			goToPrivacyPolicy: () =>
+				this.cookiesConsentModal.locator().getByRole('link', { name: 'Show me my options' }),
+			acknowledge: () =>
+				this.cookiesConsentModal.locator().getByRole('button', { name: "OK, that's fine" })
+		}
+	};
 
 	get privacyPolicyLink() {
 		return this.page.getByRole('link', { name: 'Privacy policy' });
+	}
+
+	async assertDoesNotShowCookiesConsentModal() {
+		await pause(2000); // give modal time to pop up
+		await expect(this.cookiesConsentModal.locator()).not.toBeVisible();
 	}
 
 	/** Returns key-value store of everything currently in `window.localStorage` */
@@ -43,6 +67,11 @@ export class BasePage {
 		});
 	}
 
+	/** Returns key-value store of current cookies */
+	async readCookies() {
+		return await this.page.context().cookies();
+	}
+
 	readonly privacy = {
 		/**
 		 * Mocks the state reached when user acknowledges privacy policy
@@ -50,13 +79,38 @@ export class BasePage {
 		 * Refer to `src/lib/utils/privacy.ts`
 		 */
 		setHasConsentedToCookies: async (hasConsented = true) => {
-			await this.page.evaluate(() => {
-				if (hasConsented) {
+			await this.page.waitForLoadState('domcontentloaded');
+
+			if (hasConsented) {
+				console.log('setting cookies because hasConsented');
+				// set mock cookie and local storage values
+				await this.page.context().addCookies([mockHeapAnalyticsCookie()]);
+				await this.page.evaluate(() => {
+					// have to use hard-coded strings here
+					window.localStorage.removeItem('user_denies_cookies_usage');
 					window.localStorage.setItem('user_approved_cookies_usage', new Date().toISOString());
-				} else {
+				});
+			} else {
+				// clear cookies and local storage values
+				console.log('clearing cookies because not hasConsented');
+				await this.page.evaluate(() => {
+					// have to use hard-coded strings here
+					window.localStorage.removeItem('user_approved_cookies_usage');
 					window.localStorage.setItem('user_denies_cookies_usage', 'true');
-				}
-			});
+				});
+				await this.page.context().clearCookies();
+			}
+
+			await this.page.reload({ waitUntil: 'load' });
+		},
+
+		/** Returns the cookie used for Heap analytics */
+		heapAnalyticsCookie: async () => {
+			const cookies = await this.readCookies();
+			const matchingCookie = cookies.find(({ name }) => name.startsWith('_hp2_id.'));
+			if (matchingCookie?.expires || 0 > dayjs().unix()) {
+				return matchingCookie;
+			}
 		}
 	};
 }
