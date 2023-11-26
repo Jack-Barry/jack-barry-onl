@@ -27,8 +27,11 @@ export class BlogIndexPage extends BasePage {
 		await assertIsActiveBreadcrumb(lastItem);
 	}
 
-	readonly links = {
-		latestPost: () => this.page.getByRole('link', { name: 'Read more' }),
-		allPosts: () => this.page.getByRole('link', { name: 'See all blog posts' })
+	readonly filters = {
+		// visibilityToggle: () =>
+		// clearAllButton: () =>
+		// searchTermInput: () =>
+		// tags: () =>
+		// clearTagsButton: () =>
 	};
 }

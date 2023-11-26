@@ -3,8 +3,10 @@ import { HomePage } from './pages/routes/(app)/home/HomePage';
 import { LandingPage } from './pages/routes/LandingPage';
 import { PrivacyPolicyPage } from './pages/routes/(app)/privacy-policy/PrivacyPolicy';
 import { BlogIndexPage } from './pages/routes/(app)/blog/BlogIndexPage';
+import { BasePage } from './pages/BasePage';
 
 export type PlaywrightFixtures = {
+	_basePage: BasePage;
 	_blogIndexPage: BlogIndexPage;
 	_homePage: HomePage;
 	_landingPage: LandingPage;
@@ -12,6 +14,12 @@ export type PlaywrightFixtures = {
 };
 
 export const test = base.extend<PlaywrightFixtures>({
+	_basePage: async ({ page }, use) => {
+		const customPage = new BasePage(page);
+		await customPage.init();
+		await use(customPage);
+	},
+
 	_blogIndexPage: async ({ page }, use) => {
 		const customPage = new BlogIndexPage(page);
 		await customPage.init();
