@@ -1,7 +1,7 @@
 import { expect } from '../extend';
 import type { BasePage } from '../pages/BasePage';
-import { HomePage } from '../pages/HomePage';
-import { PrivacyPolicyPage } from '../pages/PrivacyPolicy';
+import { HomePage } from '../pages/routes/(app)/home/HomePage';
+import { PrivacyPolicyPage } from '../pages/routes/(app)/privacy-policy/PrivacyPolicy';
 import { assertIsActiveBreadcrumb, assertIsInactiveBreadcrumb } from './breadcrumb';
 
 /**

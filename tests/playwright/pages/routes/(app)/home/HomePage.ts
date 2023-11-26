@@ -1,6 +1,6 @@
 import { expect, type Page } from '@playwright/test';
-import { BasePage } from './BasePage';
-import { assertIsActiveBreadcrumb } from '../utils/breadcrumb';
+import { BasePage } from '../../../BasePage';
+import { assertIsActiveBreadcrumb } from '../../../../utils/breadcrumb';
 
 export class HomePage extends BasePage {
 	static URL = '/home';

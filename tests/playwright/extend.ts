@@ -1,8 +1,8 @@
 import { test as base } from '@playwright/test';
-import { HomePage } from './pages/HomePage';
-import { LandingPage } from './pages/LandingPage';
-import { PrivacyPolicyPage } from './pages/PrivacyPolicy';
-import { BlogIndexPage } from './pages/blog/BlogIndexPage';
+import { HomePage } from './pages/routes/(app)/home/HomePage';
+import { LandingPage } from './pages/routes/LandingPage';
+import { PrivacyPolicyPage } from './pages/routes/(app)/privacy-policy/PrivacyPolicy';
+import { BlogIndexPage } from './pages/routes/(app)/blog/BlogIndexPage';
 
 export type PlaywrightFixtures = {
 	_blogIndexPage: BlogIndexPage;

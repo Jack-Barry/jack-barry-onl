@@ -1,7 +1,7 @@
 import { LOCAL_STORAGE_KEY_COOKIES_CONSENT } from '../../../../src/lib/utils/storage/constants';
 import { test, expect } from '../../extend';
-import { HomePage } from '../../pages/HomePage';
-import { PrivacyPolicyPage } from '../../pages/PrivacyPolicy';
+import { HomePage } from '../../pages/routes/(app)/home/HomePage';
+import { PrivacyPolicyPage } from '../../pages/routes/(app)/privacy-policy/PrivacyPolicy';
 import { assertHasPrivacyPolicyLink } from '../../utils/privacyPolicy';
 
 test('shows no breadcrumbs', async ({ _landingPage }) => {

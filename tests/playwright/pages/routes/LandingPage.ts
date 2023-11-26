@@ -1,5 +1,5 @@
 import { expect, type Page } from '@playwright/test';
-import { BasePage } from './BasePage';
+import { BasePage } from '../BasePage';
 
 export class LandingPage extends BasePage {
 	static URL = '/';
