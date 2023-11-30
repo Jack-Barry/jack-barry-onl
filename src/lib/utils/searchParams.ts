@@ -5,8 +5,8 @@ import { goto } from '$app/navigation';
  * Applies `next` search params to browser URL if they do not match what's already
  *   there
  */
-export async function applyParamsToUrl(current: URLSearchParams, next: URLSearchParams) {
-	if (browser && !paramsAreEqual(current, next)) {
+export async function applyParamsToUrl(next: URLSearchParams) {
+	if (browser) {
 		await goto('?' + next.toString());
 	}
 }
@@ -14,6 +14,8 @@ export async function applyParamsToUrl(current: URLSearchParams, next: URLSearch
 function paramsAreEqual(paramsA: URLSearchParams, paramsB: URLSearchParams) {
 	const paramsAEntries = Array.from(paramsA.entries());
 	const paramsBEntries = Array.from(paramsB.entries());
+
+	console.log(JSON.stringify({ paramsAEntries, paramsBEntries }));
 
 	if (paramsAEntries.length !== paramsBEntries.length) {
 		return false;

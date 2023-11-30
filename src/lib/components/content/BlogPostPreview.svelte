@@ -33,7 +33,11 @@
 		<p class="mb-0">{formattedDate(post.first_publication_date, { condensed: true })}</p>
 		<p class="mb-0">{post.data.meta_description}</p>
 		<div class="text-end">
-			<a href={`/blog/${post.uid}`} class="icon-link icon-link-hover">
+			<a
+				data-testid="preview-link-to-blog-post-{post.uid}"
+				href={`/blog/${post.uid}`}
+				class="icon-link icon-link-hover"
+			>
 				Read more
 				<ArrowRight />
 			</a>

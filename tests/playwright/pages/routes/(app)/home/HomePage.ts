@@ -26,4 +26,9 @@ export class HomePage extends BasePage {
 		latestPost: () => this.page.getByRole('link', { name: 'Read more' }),
 		allPosts: () => this.page.getByRole('link', { name: 'See all blog posts' })
 	};
+
+	readonly aboutSection = {
+		careerButton: () => this.page.getByRole('button', { name: 'Career' }),
+		personalButton: () => this.page.getByRole('button', { name: 'Personal' })
+	};
 }

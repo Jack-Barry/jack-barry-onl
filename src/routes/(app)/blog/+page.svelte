@@ -13,7 +13,7 @@
 	import LoadingEllipsis from '$lib/components/LoadingEllipsis.svelte';
 	import TransitionContainer from '$lib/components/layout/TransitionContainer.svelte';
 	import type { TagObject } from '$lib/components/content/types.js';
-	import { BY_JACK_BARRY, SITE_TITLE_PREFIX } from '$lib/utils/constants.js';
+	import { BY_JACK_BARRY } from '$lib/utils/constants.js';
 	import type { BlogPostDocument } from '../../../prismicio-types.js';
 	import { page } from '$app/stores';
 	import { applyParamsToUrl } from '$lib/utils/searchParams.js';
@@ -54,7 +54,7 @@
 	async function handleSearchTermChange() {
 		queryOptions.update((prev) => ({ ...prev, searchTerm: $debouncedSearchTerm }));
 		blogPostSearchParams.setSearchTerm($debouncedSearchTerm);
-		await applyParamsToUrl($page.url.searchParams, blogPostSearchParams.asURLSearchParams);
+		await applyParamsToUrl(blogPostSearchParams.asURLSearchParams);
 	}
 
 	$: $selectedTags, handleSelectedTagsChange();
@@ -67,7 +67,7 @@
 		queryOptions.update((prev) => ({ ...prev, tags: tagsToFilterWith }));
 
 		blogPostSearchParams.setTags(tagsToFilterWith);
-		await applyParamsToUrl($page.url.searchParams, blogPostSearchParams.asURLSearchParams);
+		await applyParamsToUrl(blogPostSearchParams.asURLSearchParams);
 	}
 
 	$: totalPosts = $query.data?.pages.length ? $query.data.pages[0].total_results_size : 0;
@@ -239,5 +239,5 @@
 			No posts match the current filters
 			<!-- </div> -->
 		{/if}
-	</div></TransitionContainer
->
+	</div>
+</TransitionContainer>

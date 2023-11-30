@@ -8,6 +8,7 @@
 <div class="d-flex flex-wrap gap-1">
 	{#each tags.sort((a, b) => a.tag.localeCompare(b.tag)) as tag (tag.tag)}
 		<button
+			data-testid="toggle-tag-{tag.tag}"
 			class="btn btn-sm"
 			class:btn-primary={tag.selected}
 			class:btn-outline-primary={!tag.selected}

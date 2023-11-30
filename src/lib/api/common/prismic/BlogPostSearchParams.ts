@@ -1,4 +1,4 @@
-import { boolFromString } from '$lib/utils/boolean';
+import { boolFromString } from '../../../utils/boolean';
 
 /** Options that can be transmitted via query string parameters to the API */
 export type BlogPostSearchOptions = {

@@ -1,4 +1,4 @@
-import { expect, type Page } from '@playwright/test';
+import test, { expect, type Page } from '@playwright/test';
 
 import { pause } from '../../../src/lib/utils/pause';
 import { interceptHeapAnalytics } from '../interceptors/thirdParty';
@@ -79,29 +79,31 @@ export class BasePage {
 		 * Refer to `src/lib/utils/privacy.ts`
 		 */
 		setHasConsentedToCookies: async (hasConsented = true) => {
-			await this.page.waitForLoadState('domcontentloaded');
+			await test.step(`${
+				hasConsented ? 'consenting to' : 'denying'
+			} analytics cookies`, async () => {
+				await this.page.waitForLoadState('domcontentloaded');
 
-			if (hasConsented) {
-				console.log('setting cookies because hasConsented');
-				// set mock cookie and local storage values
-				await this.page.context().addCookies([mockHeapAnalyticsCookie()]);
-				await this.page.evaluate(() => {
-					// have to use hard-coded strings here
-					window.localStorage.removeItem('user_denies_cookies_usage');
-					window.localStorage.setItem('user_approved_cookies_usage', new Date().toISOString());
-				});
-			} else {
-				// clear cookies and local storage values
-				console.log('clearing cookies because not hasConsented');
-				await this.page.evaluate(() => {
-					// have to use hard-coded strings here
-					window.localStorage.removeItem('user_approved_cookies_usage');
-					window.localStorage.setItem('user_denies_cookies_usage', 'true');
-				});
-				await this.page.context().clearCookies();
-			}
+				if (hasConsented) {
+					// set mock cookie and local storage values
+					await this.page.context().addCookies([mockHeapAnalyticsCookie()]);
+					await this.page.evaluate(() => {
+						// have to use hard-coded strings here
+						window.localStorage.removeItem('user_denies_cookies_usage');
+						window.localStorage.setItem('user_approved_cookies_usage', new Date().toISOString());
+					});
+				} else {
+					// clear cookies and local storage values
+					await this.page.evaluate(() => {
+						// have to use hard-coded strings here
+						window.localStorage.removeItem('user_approved_cookies_usage');
+						window.localStorage.setItem('user_denies_cookies_usage', 'true');
+					});
+					await this.page.context().clearCookies();
+				}
 
-			await this.page.reload({ waitUntil: 'load' });
+				await this.page.reload();
+			});
 		},
 
 		/** Returns the cookie used for Heap analytics */
