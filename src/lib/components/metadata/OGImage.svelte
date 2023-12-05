@@ -1,6 +1,7 @@
 <script lang="ts">
 	import JbLogoSvg from '$lib/assets/jb-logo.svg?raw';
-	const decodedSvg = `data:image/svg+xml,${encodeURIComponent(JbLogoSvg)}`;
+	const decodedSvg = `data:image/svg+xml;utf8,${encodeURIComponent(JbLogoSvg)}`;
+	console.log({ decodedSvg });
 
 	export let title: string | undefined;
 	export let subtitle: string | undefined;
@@ -15,7 +16,7 @@
 		{/if}
 	</div>
 	<div class="logo-wrapper">
-		<img class="logo" alt="" src={decodedSvg} />
+		<img class="logo" alt="Logo SVG" src={decodedSvg} />
 	</div>
 </div>
 
@@ -58,10 +59,10 @@
 	.logo-wrapper {
 		display: flex;
 		justify-content: center;
-		gap: 10vh;
 	}
 
 	.logo {
 		height: 16vh;
+		width: 39.375vh;
 	}
 </style>
