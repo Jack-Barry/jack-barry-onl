@@ -22,7 +22,7 @@
 		baseUrl += ':';
 		baseUrl += $page.url.port;
 	}
-	const ogImageUrl = baseUrl + '/api/metadata/og-images?';
+	const ogImageUrl = '/api/metadata/og-images?';
 
 	const ogImageSearchParamsFacebook = new URLSearchParams(ogImageSearchParams);
 	ogImageSearchParamsFacebook.set('platform', 'facebook');
@@ -30,7 +30,7 @@
 
 	const ogImageSearchParamsTwitter = new URLSearchParams(ogImageSearchParams);
 	ogImageSearchParamsTwitter.set('platform', 'twitter');
-	const ogImageUrlTwitter = ogImageUrl + ogImageSearchParamsTwitter.toString();
+	const ogImageUrlTwitter = baseUrl + ogImageUrl + ogImageSearchParamsTwitter.toString();
 </script>
 
 <svelte:head>
