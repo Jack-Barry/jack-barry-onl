@@ -1,8 +1,10 @@
+import type { Page, Request } from '@playwright/test';
 import { BlogPostSearchParams } from '../../../../../../src/lib/api/common/prismic/BlogPostSearchParams';
 import { expect, test } from '../../../../extend';
 import { BlogIndexPage } from '../../../../pages/routes/(app)/blog/BlogIndexPage';
 import { BlogPostPage } from '../../../../pages/routes/(app)/blog/[uid]/BlogPostPage';
 import { assertPrivacyPolicyIsEasilyAccessible } from '../../../../utils/privacyPolicyAccessibility';
+import { HomePage } from '../../../../pages/routes/(app)/home/HomePage';
 
 assertPrivacyPolicyIsEasilyAccessible(BlogIndexPage.buildUrl());
 
@@ -116,3 +118,62 @@ test('user can load more posts if available', async ({ _blogIndexPage }) => {
 		expect(await _blogIndexPage.page.getByText('Read more').count()).toBeGreaterThan(10);
 	});
 });
+
+test.describe('requests caching', () => {
+	let requests: Request[];
+
+	test.beforeEach(async ({ page, _blogIndexPage }) => {
+		requests = [];
+		page.on('request', (req) => requests.push(req));
+
+		await test.step('verify request count on page load and reload', async () => {
+			await waitForApiRequest(page, _blogIndexPage.goto);
+			expect(apiUrlRequests().length).toBe(1);
+			await waitForApiRequest(page, _blogIndexPage.privacy.setHasConsentedToCookies);
+			expect(apiUrlRequests().length).toBe(2);
+		});
+		requests = [];
+	});
+
+	test('cached responses are used when navigating around the app', async ({
+		page,
+		_blogIndexPage
+	}) => {
+		const uid = 'algorithms-deque-using-doubly-linked-list';
+		const blogPostPage = new BlogPostPage(page, uid);
+
+		await test.step('go to a blog post and come back', async () => {
+			await _blogIndexPage.linkToBlogPost(uid).click();
+			await expect(page).toHaveURL(blogPostPage.url);
+			await page.goBack();
+			await expect(page).toHaveURL(BlogIndexPage.buildUrl());
+			expect(apiUrlRequests().length).toBe(0);
+		});
+
+		await test.step('go to home page and come back', async () => {
+			await _blogIndexPage.breadcrumbItems.first().click();
+			await expect(page).toHaveURL(HomePage.URL);
+			await page.goBack();
+			await expect(page).toHaveURL(BlogIndexPage.buildUrl());
+			expect(apiUrlRequests().length).toBe(0);
+		});
+	});
+
+	function apiUrlRequests() {
+		return requests.filter((req) => req.url().match(/\/api\//));
+	}
+});
+
+const waitForApiRequest = async (page: Page, fn: () => void) => {
+	await new Promise<void>((res) => {
+		const resolveOnApiRequest = (req: Request) => {
+			if (req.url().match(/\/api\//)) {
+				page.removeListener('request', resolveOnApiRequest);
+				res();
+			}
+		};
+
+		page.on('request', resolveOnApiRequest);
+		fn();
+	});
+};

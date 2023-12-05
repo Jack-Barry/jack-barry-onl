@@ -12,6 +12,7 @@ import { assertIsActiveBreadcrumb, assertIsInactiveBreadcrumb } from './breadcru
  *   in the app
  */
 export async function assertHasPrivacyPolicyLink(pageInstance: BasePage) {
+	await pageInstance.privacy.setHasConsentedToCookies(true); // prevent race conditions with modal
 	await expect(pageInstance.privacyPolicyLink).toBeVisible();
 	await pageInstance.privacyPolicyLink.click();
 	await expect(pageInstance.page).toHaveURL(PrivacyPolicyPage.URL);

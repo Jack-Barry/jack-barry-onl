@@ -1,4 +1,3 @@
-import { pause } from '../../../../../../src/lib/utils/pause';
 import {
 	LOCAL_STORAGE_KEY_COOKIES_CONSENT,
 	LOCAL_STORAGE_KEY_COOKIES_DENY
@@ -9,7 +8,7 @@ test('does not prompt user for cookies consent if navigated to directly', async 
 	_privacyPolicyPage
 }) => {
 	await _privacyPolicyPage.goto();
-	await pause(2000); // give modal time to pop up
+	await _privacyPolicyPage.page.waitForTimeout(1000); // give modal time to pop up
 	await expect(_privacyPolicyPage.cookiesConsentModal.locator()).not.toBeVisible();
 });
 

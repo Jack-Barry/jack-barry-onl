@@ -19,12 +19,17 @@
 	import { applyParamsToUrl } from '$lib/utils/searchParams.js';
 	import { BlogPostSearchParams } from '$lib/api/common/prismic/BlogPostSearchParams.js';
 	import HeadMetadata from '$lib/components/metadata/HeadMetadata.svelte';
+	import { browser } from '$app/environment';
 
 	export let data;
 
-	const blogPostSearchParams = new BlogPostSearchParams($page.url.searchParams);
+	let blogPostSearchParams: BlogPostSearchParams | undefined;
+	if (browser) {
+		blogPostSearchParams = new BlogPostSearchParams($page.url.searchParams);
+	}
+
 	const { queryOptions, query } = infiniteQueryBlogPosts({
-		...blogPostSearchParams.asOptions,
+		...blogPostSearchParams?.asOptions,
 		previewsOnly: true
 	});
 	const filtersActive = derived(queryOptions, ($queryOptions) => {
@@ -37,12 +42,12 @@
 	}
 
 	const { debouncedInputValue: debouncedSearchTerm, liveInputValue: liveSearchTerm } =
-		useDebouncedInput({ defaultValue: blogPostSearchParams.asOptions.searchTerm });
+		useDebouncedInput({ defaultValue: blogPostSearchParams?.asOptions.searchTerm });
 
 	const tags = writable(
 		data.allTags.map<TagObject>((t) => ({
 			tag: t,
-			selected: blogPostSearchParams.asOptions.tags.includes(t)
+			selected: blogPostSearchParams?.asOptions.tags.includes(t)
 		}))
 	);
 	const ratioTagsSelected = writable(1);
@@ -53,8 +58,10 @@
 	$: $debouncedSearchTerm, handleSearchTermChange();
 	async function handleSearchTermChange() {
 		queryOptions.update((prev) => ({ ...prev, searchTerm: $debouncedSearchTerm }));
-		blogPostSearchParams.setSearchTerm($debouncedSearchTerm);
-		await applyParamsToUrl(blogPostSearchParams.asURLSearchParams);
+		if (blogPostSearchParams) {
+			blogPostSearchParams.setSearchTerm($debouncedSearchTerm);
+			await applyParamsToUrl(blogPostSearchParams.asURLSearchParams);
+		}
 	}
 
 	$: $selectedTags, handleSelectedTagsChange();
@@ -66,8 +73,10 @@
 		const tagsToFilterWith = allOrNoneSelected ? [] : $selectedTags;
 		queryOptions.update((prev) => ({ ...prev, tags: tagsToFilterWith }));
 
-		blogPostSearchParams.setTags(tagsToFilterWith);
-		await applyParamsToUrl(blogPostSearchParams.asURLSearchParams);
+		if (blogPostSearchParams) {
+			blogPostSearchParams.setTags(tagsToFilterWith);
+			await applyParamsToUrl(blogPostSearchParams.asURLSearchParams);
+		}
 	}
 
 	$: totalPosts = $query.data?.pages.length ? $query.data.pages[0].total_results_size : 0;

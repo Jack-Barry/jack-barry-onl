@@ -1,10 +1,10 @@
 import test, { expect, type Page } from '@playwright/test';
 
-import { pause } from '../../../src/lib/utils/pause';
 import { interceptHeapAnalytics } from '../interceptors/thirdParty';
 import { interceptApiHeapUserDelete } from '../interceptors/api';
 import { mockHeapAnalyticsCookie } from '../utils/heapAnalytics';
 import dayjs from 'dayjs';
+import { performWithRetries } from '../utils/performWithRetries';
 
 export class BasePage {
 	constructor(public page: Page) {}
@@ -41,31 +41,34 @@ export class BasePage {
 	}
 
 	async assertDoesNotShowCookiesConsentModal() {
-		await pause(2000); // give modal time to pop up
+		await this.page.waitForTimeout(2000); // give modal time to pop up
 		await expect(this.cookiesConsentModal.locator()).not.toBeVisible();
 	}
 
 	/** Returns key-value store of everything currently in `window.localStorage` */
-	async readLocalStorage() {
-		return await this.page.evaluate(() => {
-			const current: Record<string, string> = {};
-			const count = window.localStorage.length;
-			for (let i = 0; i < count; i++) {
-				const key = window.localStorage.key(i);
-				if (!key) {
-					continue;
-				}
+	readLocalStorage = async () =>
+		await performWithRetries(
+			async () =>
+				await this.page.evaluate(() => {
+					const current: Record<string, string> = {};
+					const count = window.localStorage.length;
+					for (let i = 0; i < count; i++) {
+						const key = window.localStorage.key(i);
+						if (!key) {
+							continue;
+						}
 
-				const value = window.localStorage.getItem(key);
-				if (!value) {
-					continue;
-				}
+						const value = window.localStorage.getItem(key);
+						if (!value) {
+							continue;
+						}
 
-				current[key] = value;
-			}
-			return current;
-		});
-	}
+						current[key] = value;
+					}
+					return current;
+				}),
+			{ warningPrefix: 'readLocalStorage error' }
+		);
 
 	/** Returns key-value store of current cookies */
 	async readCookies() {
@@ -82,25 +85,31 @@ export class BasePage {
 			await test.step(`${
 				hasConsented ? 'consenting to' : 'denying'
 			} analytics cookies`, async () => {
-				await this.page.waitForLoadState('domcontentloaded');
-
-				if (hasConsented) {
-					// set mock cookie and local storage values
-					await this.page.context().addCookies([mockHeapAnalyticsCookie()]);
-					await this.page.evaluate(() => {
-						// have to use hard-coded strings here
-						window.localStorage.removeItem('user_denies_cookies_usage');
-						window.localStorage.setItem('user_approved_cookies_usage', new Date().toISOString());
-					});
-				} else {
-					// clear cookies and local storage values
-					await this.page.evaluate(() => {
-						// have to use hard-coded strings here
-						window.localStorage.removeItem('user_approved_cookies_usage');
-						window.localStorage.setItem('user_denies_cookies_usage', 'true');
-					});
-					await this.page.context().clearCookies();
-				}
+				await performWithRetries(
+					async () => {
+						if (hasConsented) {
+							// set mock cookie and local storage values
+							await this.page.context().addCookies([mockHeapAnalyticsCookie()]);
+							await this.page.evaluate(() => {
+								// have to use hard-coded strings here
+								window.localStorage.removeItem('user_denies_cookies_usage');
+								window.localStorage.setItem(
+									'user_approved_cookies_usage',
+									new Date().toISOString()
+								);
+							});
+						} else {
+							// clear cookies and local storage values
+							await this.page.evaluate(() => {
+								// have to use hard-coded strings here
+								window.localStorage.removeItem('user_approved_cookies_usage');
+								window.localStorage.setItem('user_denies_cookies_usage', 'true');
+							});
+							await this.page.context().clearCookies();
+						}
+					},
+					{ warningPrefix: 'setHasConsentedToCookies error', pauseMs: 100 }
+				);
 
 				await this.page.reload();
 			});

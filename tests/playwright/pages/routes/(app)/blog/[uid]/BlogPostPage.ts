@@ -38,7 +38,7 @@ export class BlogPostPage extends BasePage {
 
 		const secondItem = items.nth(1);
 		expect(await secondItem.innerText()).toBe('Blog');
-		await assertIsInactiveBreadcrumb(secondItem, { expectedHref: BlogIndexPage.URL });
+		await assertIsInactiveBreadcrumb(secondItem, { expectedHref: BlogIndexPage.buildUrl() });
 
 		const lastItem = items.last();
 		expect(await lastItem.innerText()).toBe('Post');

@@ -14,6 +14,26 @@ export type PlaywrightFixtures = {
 };
 
 export const test = base.extend<PlaywrightFixtures>({
+	page: async ({ page }, use) => {
+		const goto = page.goto;
+		page.goto = async function (url, opts) {
+			const res = await goto.call(page, url, opts);
+			await page.waitForSelector('body.base-layout-mounted');
+			console.log('waited for body.base-layout-mounted', { url, opts });
+			return res;
+		};
+
+		const reload = page.reload;
+		page.reload = async function (opts) {
+			const res = await reload.call(page, opts);
+			await page.waitForSelector('body.base-layout-mounted');
+			console.log('waited for body.base-layout-mounted', { opts });
+			return res;
+		};
+
+		await use(page);
+	},
+
 	_basePage: async ({ page }, use) => {
 		const customPage = new BasePage(page);
 		await customPage.init();

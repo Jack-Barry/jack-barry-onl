@@ -23,8 +23,12 @@ export class HomePage extends BasePage {
 	}
 
 	readonly links = {
-		latestPost: () => this.page.getByRole('link', { name: 'Read more' }),
 		allPosts: () => this.page.getByRole('link', { name: 'See all blog posts' })
+	};
+
+	readonly latestPost = {
+		link: () => this.page.getByRole('link', { name: 'Read more' }),
+		tags: () => this.page.getByTestId('toggle-tag-Skills: Technical')
 	};
 
 	readonly aboutSection = {

@@ -20,7 +20,7 @@ export class BlogIndexPage extends BasePage {
 		super(page);
 	}
 
-	async goto(searchParams?: BlogPostSearchParams) {
+	goto = async (searchParams?: BlogPostSearchParams) => {
 		await test.step(`going to ${BlogIndexPage.URL}`, async () => {
 			const expectedUrl = BlogIndexPage.buildUrl(searchParams);
 			await this.page.goto(expectedUrl);
@@ -38,7 +38,7 @@ export class BlogIndexPage extends BasePage {
 				}
 			}
 		});
-	}
+	};
 
 	async assertHasExpectedBreadcrumbs() {
 		const items = this.breadcrumbItems;

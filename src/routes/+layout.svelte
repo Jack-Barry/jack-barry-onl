@@ -13,6 +13,7 @@
 	import type { PrivacyPolicyModalContentSlice } from '../prismicio-types';
 
 	import '../scss/index.scss';
+	import { onMount } from 'svelte';
 
 	export let data;
 
@@ -22,10 +23,17 @@
 
 	const privacyPolicyModalSlice = data.privacyPolicy.data
 		.slices[0] as PrivacyPolicyModalContentSlice;
+
+	onMount(() => {
+		// facilitate e2e testing by waiting for hydration
+		document.body.classList.add('base-layout-mounted');
+	});
 </script>
 
 <svelte:head>
-	<HeapAnalytics />
+	{#if !$page.data.isTestEnv}
+		<HeapAnalytics />
+	{/if}
 </svelte:head>
 
 <QueryClientProvider client={data.queryClient}>
