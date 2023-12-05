@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { browser } from '$app/environment';
 	import { page } from '$app/stores';
 	import { JACK_BARRY, SITE_TITLE_PREFIX } from '$lib/utils/constants';
 	import { METADATA_IMAGE_DIMENSIONS } from './constants';
@@ -18,7 +19,7 @@
 		ogImageSearchParams.set('subtitle', ogImageSubtitle);
 	}
 	let baseUrl = $page.url.protocol + '//' + $page.url.hostname;
-	if ($page.url.protocol !== 'https') {
+	if (browser && $page.url.protocol !== 'https') {
 		baseUrl += ':';
 		baseUrl += $page.url.port;
 	}
