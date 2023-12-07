@@ -14,5 +14,7 @@
 </script>
 
 <section data-slice-type={slice.slice_type} data-slice-variation={slice.variation}>
-	<PrismicImage field={slice.primary.image} class="img-fluid" />
+	<div class="d-flex justify-content-center mb-3">
+		<PrismicImage field={slice.primary.image} class="img-fluid" />
+	</div>
 </section>
