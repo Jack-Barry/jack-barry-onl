@@ -22,7 +22,8 @@
               "typescript",
               "powershell",
               "yaml",
-              "java"
+              "java",
+              "rust"
             ],
             "default_value": "shell"
           }
