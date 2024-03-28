@@ -6,6 +6,7 @@
 
 	import hljs, { type LanguageFn } from 'highlight.js';
 	// Begin supported langs
+	import go from 'highlight.js/lib/languages/go';
 	import java from 'highlight.js/lib/languages/java';
 	import javascript from 'highlight.js/lib/languages/javascript';
 	import powershell from 'highlight.js/lib/languages/powershell';
@@ -42,6 +43,9 @@
 	const code = (slice.primary.code[0] as { text: string }).text;
 	let langFn: LanguageFn;
 	switch (lang) {
+		case 'go':
+			langFn = go;
+			break;
 		case 'java':
 			langFn = java;
 			break;

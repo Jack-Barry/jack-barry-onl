@@ -23,7 +23,8 @@
               "powershell",
               "yaml",
               "java",
-              "rust"
+              "rust",
+              "go"
             ],
             "default_value": "shell"
           }
