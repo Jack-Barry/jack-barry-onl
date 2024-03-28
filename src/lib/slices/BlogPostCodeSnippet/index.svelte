@@ -10,6 +10,7 @@
 	import java from 'highlight.js/lib/languages/java';
 	import javascript from 'highlight.js/lib/languages/javascript';
 	import powershell from 'highlight.js/lib/languages/powershell';
+	import python from 'highlight.js/lib/languages/python';
 	import rust from 'highlight.js/lib/languages/rust';
 	import shell from 'highlight.js/lib/languages/shell';
 	import typescript from 'highlight.js/lib/languages/typescript';
@@ -54,6 +55,9 @@
 			break;
 		case 'powershell':
 			langFn = powershell;
+			break;
+		case 'python':
+			langFn = python;
 			break;
 		case 'rust':
 			langFn = rust;

@@ -24,7 +24,8 @@
               "yaml",
               "java",
               "rust",
-              "go"
+              "go",
+              "python"
             ],
             "default_value": "shell"
           }
