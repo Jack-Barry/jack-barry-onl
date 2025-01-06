@@ -1,15 +1,16 @@
 .code {
-	font-family: $font-family-monospace;
-	@include font-size($code-font-size);
-	color: var(--#{$prefix}code-color);
-	word-wrap: break-word;
+  font-family: $font-family-monospace;
+  @include font-size($code-font-size);
+  color: var(--#{$prefix}code-color);
+  word-wrap: break-word;
 
-	// Streamline the style when inside anchors to avoid broken underline and more
-	a > & {
-		color: inherit;
-	}
+  // Streamline the style when inside anchors to avoid broken underline and more
+  a > & {
+    color: inherit;
+  }
 }
 
-[data-slice-type='code_block'] > div {
-	border-radius: $border-radius-lg;
+blockquote {
+  @extend .alert;
+  @extend .alert-secondary;
 }

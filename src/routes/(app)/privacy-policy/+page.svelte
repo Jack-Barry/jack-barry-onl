@@ -1,40 +1,37 @@
 <script lang="ts">
-	import HeadMetadata from '$lib/components/metadata/HeadMetadata.svelte';
-	import PrivacyPolicy from '$lib/slices/PrivacyPolicy/index.svelte';
-	import { JACK_BARRY } from '$lib/utils/constants.js';
-	import { formattedDate } from '$lib/utils/dates.js';
-	import {
-		consentToCookieUsage,
-		userPreviouslyConsentedToCookieUsage,
-		userPreviouslyDeniedCookieUsage
-	} from '$lib/utils/privacy.js';
-	import type { PrivacyPolicySlice } from '../../../prismicio-types.js';
+  import PrivacyPolicyContent from '$lib/components/content/privacyPolicy/PrivacyPolicyContent.svelte';
+  import HeadMetadata from '$lib/components/metadata/HeadMetadata.svelte';
+  import { JACK_BARRY } from '$lib/utils/constants.js';
+  import { formattedDate } from '$lib/utils/dates.js';
+  import {
+    consentToCookieUsage,
+    userPreviouslyConsentedToCookieUsage,
+    userPreviouslyDeniedCookieUsage
+  } from '$lib/utils/privacy.js';
 
-	export let data;
+  const publishDate = '2023-11-11T21:51:06+0000';
+  const modifiedDate = '2023-12-05T02:14:43+0000';
 
-	const { privacyPolicy } = data;
-	const slice = privacyPolicy.data.slices[1] as PrivacyPolicySlice;
-
-	/**
-	 * If user hasn't denied or consented before and lands on this page, consider
-	 *   it as consenting to cookies usage
-	 */
-	if (!userPreviouslyDeniedCookieUsage() && !userPreviouslyConsentedToCookieUsage()) {
-		consentToCookieUsage();
-	}
+  /**
+   * If user hasn't denied or consented before and lands on this page, consider
+   *   it as consenting to cookies usage
+   */
+  if (!userPreviouslyDeniedCookieUsage() && !userPreviouslyConsentedToCookieUsage()) {
+    consentToCookieUsage();
+  }
 </script>
 
 <HeadMetadata
-	siteTitle={`${privacyPolicy.data.meta_title}`}
-	ogImageTitle={JACK_BARRY}
-	ogImageSubtitle={`${privacyPolicy.data.meta_title}`}
-	description={`${privacyPolicy.data.meta_description}`}
-	publishDate={privacyPolicy.first_publication_date}
-	modifiedDate={privacyPolicy.last_publication_date}
+  siteTitle={'Privacy Policy'}
+  ogImageTitle={JACK_BARRY}
+  ogImageSubtitle={'Privacy Policy'}
+  description={"Privacy policy for Jack Barry's personal website"}
+  {publishDate}
+  {modifiedDate}
 />
 
 <h1>Privacy Policy</h1>
 <div class="fs-fine-print text-secondary mb-2">
-	Last updated: {formattedDate(privacyPolicy.last_publication_date)}
+  Last updated: {formattedDate(modifiedDate)}
 </div>
-<PrivacyPolicy {slice} />
+<PrivacyPolicyContent />

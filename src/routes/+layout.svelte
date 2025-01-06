@@ -1,49 +1,51 @@
 <script lang="ts">
-	import { QueryClientProvider } from '@tanstack/svelte-query';
-	import { SvelteQueryDevtools } from '@tanstack/svelte-query-devtools';
-	import { blur } from 'svelte/transition';
+  import { onMount, tick } from 'svelte';
+  import { browser } from '$app/environment';
+  import { afterNavigate, beforeNavigate } from '$app/navigation';
+  import HeapAnalytics from '$lib/analytics/HeapAnalytics.svelte';
+  import AppFooter from '$lib/components/layout/AppFooter.svelte';
+  import Breadcrumbs from '$lib/components/layout/Navbar.svelte';
+  import PrivacyPolicyModal from '$lib/components/content/privacyPolicy/PrivacyPolicyModal.svelte';
+  import { getUserThemePreference } from '$lib/utils/theme/getUserThemePreference';
 
-	import { browser } from '$app/environment';
-	import { page } from '$app/stores';
-	import HeapAnalytics from '$lib/analytics/HeapAnalytics.svelte';
-	import AppFooter from '$lib/components/layout/AppFooter.svelte';
-	import Breadcrumbs from '$lib/components/layout/Navbar.svelte';
-	import PrivacyPolicyModal from '$lib/components/content/PrivacyPolicyModal.svelte';
-	import { getUserThemePreference } from '$lib/utils/theme/getUserThemePreference';
-	import type { PrivacyPolicyModalContentSlice } from '../prismicio-types';
+  import '../scss/index.scss';
 
-	import '../scss/index.scss';
-	import { onMount } from 'svelte';
+  let { data, children } = $props();
 
-	export let data;
+  if (browser) {
+    getUserThemePreference();
+  }
 
-	if (browser) {
-		getUserThemePreference();
-	}
+  onMount(() => {
+    // facilitate e2e testing by waiting for hydration
+    document.body.classList.add('base-layout-mounted');
+  });
 
-	const privacyPolicyModalSlice = data.privacyPolicy.data
-		.slices[0] as PrivacyPolicyModalContentSlice;
+  beforeNavigate(async () => {
+    if (!browser) return;
+    document.getElementsByTagName('html')[0].classList.add('pageSwitch');
+  });
 
-	onMount(() => {
-		// facilitate e2e testing by waiting for hydration
-		document.body.classList.add('base-layout-mounted');
-	});
+  afterNavigate(async () => {
+    if (!browser) return;
+    await tick();
+    document.getElementsByTagName('html')[0].classList.remove('pageSwitch');
+  });
 </script>
 
 <svelte:head>
-	{#if !$page.data.isTestEnv}
-		<HeapAnalytics />
-	{/if}
+  {#if !data.isTestEnv}
+    <HeapAnalytics />
+  {/if}
 </svelte:head>
 
-<QueryClientProvider client={data.queryClient}>
-	<Breadcrumbs />
-	{#key $page.route?.id}
-		<!-- <div in:blur={{ delay: 400 }}> -->
-		<slot />
-		<!-- </div> -->
-	{/key}
-	<AppFooter />
-	<PrivacyPolicyModal privacyPolicyContent={privacyPolicyModalSlice} />
-	<SvelteQueryDevtools styleNonce={undefined} />
-</QueryClientProvider>
+<Breadcrumbs />
+{@render children?.()}
+<AppFooter />
+<PrivacyPolicyModal />
+
+<style>
+  :global(html.pageSwitch) {
+    scroll-behavior: auto;
+  }
+</style>

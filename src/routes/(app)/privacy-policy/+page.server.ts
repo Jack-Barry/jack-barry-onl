@@ -1,14 +1,8 @@
 export const prerender = true;
 
 export async function load({ url, parent }) {
-
-  const { breadcrumbs, privacyPolicy } = await parent()
+  const { breadcrumbs } = await parent();
   return {
-    breadcrumbs: [
-      ...breadcrumbs,
-      { label: 'Privacy Policy', href: url.pathname }
-    ],
-    privacyPolicy
+    breadcrumbs: [...breadcrumbs, { label: 'Privacy Policy', href: url.pathname }]
   };
 }
-

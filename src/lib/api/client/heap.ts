@@ -7,53 +7,53 @@ type Cookies = Record<string, string>;
  *   and reloads browser to shut off the analytics script
  */
 export async function deleteUserFromHeapAnalytics(): Promise<{ requestId: string } | void> {
-	const cookies = allCookies();
-	const userId = getUserId(cookies);
-	let response;
-	if (userId) {
-		response = await (await fetch(`/api/heap/user/${userId}`, { method: 'DELETE' })).json();
-	}
-	removeHeapCookies(cookies);
-	return response;
+  const cookies = allCookies();
+  const userId = getUserId(cookies);
+  let response;
+  if (userId) {
+    response = await (await fetch(`/api/heap/user/${userId}`, { method: 'DELETE' })).json();
+  }
+  removeHeapCookies(cookies);
+  return response;
 }
 
 /** Issues request to check user deletion status */
 export async function checkUserDeletionStatus(
-	requestId: string
+  requestId: string
 ): Promise<{ status: string } | void> {
-	return await (await fetch(`/api/heap/user-deletion-status/${requestId}`)).json();
+  return await (await fetch(`/api/heap/user-deletion-status/${requestId}`)).json();
 }
 
 function getUserId(cookies: Cookies) {
-	return getUserIdCookieId(cookies)?.split('.').at(-1);
+  return getUserIdCookieId(cookies)?.split('.').at(-1);
 }
 
 function removeHeapCookies(cookies: Cookies) {
-	const cookieForUserId = getUserIdCookieId(cookies);
-	const cookieForSession = getSessionCookieId(cookies);
-	const replayCookieIds = getReplayCookieIds(cookies);
+  const cookieForUserId = getUserIdCookieId(cookies);
+  const cookieForSession = getSessionCookieId(cookies);
+  const replayCookieIds = getReplayCookieIds(cookies);
 
-	if (cookieForUserId) {
-		expireCookie(cookieForUserId);
-	}
+  if (cookieForUserId) {
+    expireCookie(cookieForUserId);
+  }
 
-	if (cookieForSession) {
-		expireCookie(cookieForSession);
-	}
+  if (cookieForSession) {
+    expireCookie(cookieForSession);
+  }
 
-	replayCookieIds.forEach((id) => {
-		expireCookie(id);
-	});
+  replayCookieIds.forEach((id) => {
+    expireCookie(id);
+  });
 }
 
 function getUserIdCookieId(cookies: Cookies) {
-	return Object.keys(cookies).find((k) => k.startsWith('_hp2_id.'));
+  return Object.keys(cookies).find((k) => k.startsWith('_hp2_id.'));
 }
 
 function getSessionCookieId(cookies: Cookies) {
-	return Object.keys(cookies).find((k) => k.startsWith('_hp2_ses_props.'));
+  return Object.keys(cookies).find((k) => k.startsWith('_hp2_ses_props.'));
 }
 
 function getReplayCookieIds(cookies: Cookies) {
-	return Object.keys(cookies).filter((k) => k.startsWith('userty.core.'));
+  return Object.keys(cookies).filter((k) => k.startsWith('userty.core.'));
 }
