@@ -1,17 +1,14 @@
-import { apiPrismic } from '$lib/api/server/prismic.js';
+import { getLatestPost } from '$lib/api/server/blogPosts.js';
 
 export const prerender = true;
 
-export async function load({ fetch, parent }) {
-	const { allTags, breadcrumbs } = await parent();
-	const api = apiPrismic({ fetch });
-	const latestPost = await api.blogPosts.getLatest();
-	const aboutPage = await api.aboutPage.get();
+export async function load({ parent }) {
+  const { breadcrumbs } = await parent();
 
-	return {
-		breadcrumbs,
-		allTags,
-		latestPost,
-		aboutPage
-	};
+  const latestPost = await getLatestPost();
+
+  return {
+    breadcrumbs,
+    latestPost
+  };
 }

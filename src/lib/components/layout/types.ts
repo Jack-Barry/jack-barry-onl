@@ -1,1 +1,1 @@
-export type BreadcrumbConfig = { label: string; href: string }
+export type BreadcrumbConfig = { label: string; href: string };

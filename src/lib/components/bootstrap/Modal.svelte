@@ -1,46 +1,55 @@
-<script context="module" lang="ts">
-	import classNames from 'classnames';
-	import { writable } from 'svelte/store';
-	import { browser } from '$app/environment';
+<script module lang="ts">
+  import classNames from 'classnames';
+  import { writable } from 'svelte/store';
+  import { browser } from '$app/environment';
 
-	let Modal = writable<typeof import('bootstrap').Modal | undefined>();
-	if (browser) {
-		import('bootstrap/js/dist/modal').then((module) => {
-			Modal.set(module.default);
-		});
-	}
+  let Modal = writable<typeof import('bootstrap').Modal | undefined>();
+  if (browser) {
+    import('bootstrap/js/dist/modal').then((module) => {
+      Modal.set(module.default);
+    });
+  }
 </script>
 
 <script lang="ts">
-	export let modalId: string;
-	export let showOnLoad: boolean = false;
-	export let dialogClass: string = '';
+  interface Props {
+    modalId: string;
+    showOnLoad?: boolean;
+    dialogClass?: string;
+    children?: import('svelte').Snippet;
+  }
 
-	let modalInstance: import('bootstrap').Modal | undefined;
-	$: if ($Modal) {
-		modalInstance = new $Modal(document.getElementById(modalId) as Element);
-		if (modalInstance && showOnLoad) {
-			modalInstance.show();
-		}
-	}
+  let { modalId, showOnLoad = false, dialogClass = '', children }: Props = $props();
 
-	export function hideModal() {
-		if (modalInstance) {
-			modalInstance.hide();
-		}
-	}
+  let modalInstance: import('bootstrap').Modal | undefined;
+  $effect(() => {
+    if (!$Modal) {
+      return;
+    }
 
-	export function toggleModal() {
-		if (modalInstance) {
-			modalInstance.toggle();
-		}
-	}
+    modalInstance = new $Modal(document.getElementById(modalId) as Element);
+    if (showOnLoad) {
+      modalInstance.show();
+    }
+  });
+
+  export function hideModal() {
+    if (modalInstance) {
+      modalInstance.hide();
+    }
+  }
+
+  export function toggleModal() {
+    if (modalInstance) {
+      modalInstance.toggle();
+    }
+  }
 </script>
 
 <div id={modalId} class="modal fade" tabindex="-1">
-	<div class={classNames('modal-dialog', dialogClass)}>
-		<div class="modal-content">
-			<slot />
-		</div>
-	</div>
+  <div class={classNames('modal-dialog', dialogClass)}>
+    <div class="modal-content">
+      {@render children?.()}
+    </div>
+  </div>
 </div>

@@ -12,20 +12,20 @@ import { assertIsActiveBreadcrumb, assertIsInactiveBreadcrumb } from './breadcru
  *   in the app
  */
 export async function assertHasPrivacyPolicyLink(pageInstance: BasePage) {
-	await pageInstance.privacy.setHasConsentedToCookies(true); // prevent race conditions with modal
-	await expect(pageInstance.privacyPolicyLink).toBeVisible();
-	await pageInstance.privacyPolicyLink.click();
-	await expect(pageInstance.page).toHaveURL(PrivacyPolicyPage.URL);
+  await pageInstance.privacy.setHasConsentedToCookies(true); // prevent race conditions with modal
+  await expect(pageInstance.privacyPolicyLink).toBeVisible();
+  await pageInstance.privacyPolicyLink.click();
+  await expect(pageInstance.page).toHaveURL(PrivacyPolicyPage.URL);
 
-	const privacyPolicyPage = new PrivacyPolicyPage(pageInstance.page);
-	await expect(privacyPolicyPage.page).toHaveURL(PrivacyPolicyPage.URL);
-	const items = privacyPolicyPage.breadcrumbItems;
-	expect(await items.count()).toBe(2);
-	const firstItem = items.first();
-	expect(await firstItem.innerText()).toBe('Home');
-	await assertIsInactiveBreadcrumb(firstItem, { expectedHref: HomePage.URL });
+  const privacyPolicyPage = new PrivacyPolicyPage(pageInstance.page);
+  await expect(privacyPolicyPage.page).toHaveURL(PrivacyPolicyPage.URL);
+  const items = privacyPolicyPage.breadcrumbItems;
+  expect(await items.count()).toBe(2);
+  const firstItem = items.first();
+  expect(await firstItem.innerText()).toBe('Home');
+  await assertIsInactiveBreadcrumb(firstItem, { expectedHref: HomePage.URL });
 
-	const lastItem = items.last();
-	expect(await lastItem.innerText()).toBe('Privacy Policy');
-	await assertIsActiveBreadcrumb(lastItem);
+  const lastItem = items.last();
+  expect(await lastItem.innerText()).toBe('Privacy Policy');
+  await assertIsActiveBreadcrumb(lastItem);
 }
