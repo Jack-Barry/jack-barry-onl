@@ -1,8 +1,17 @@
 <script lang="ts">
   import BlogPostPreview from '$lib/components/content/BlogPostPreview.svelte';
+  import HeadMetadata from '$lib/components/metadata/HeadMetadata.svelte';
+  import { BY_JACK_BARRY } from '$lib/utils/constants.js';
 
   let { data } = $props();
 </script>
+
+<HeadMetadata
+  siteTitle="Blog"
+  ogImageTitle="Blog Posts"
+  ogImageSubtitle={BY_JACK_BARRY}
+  description="Writings and ramblings from the one of several Jack Barrys"
+/>
 
 <h1>Blog Posts</h1>
 
