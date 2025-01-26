@@ -5,13 +5,7 @@ import PlayfairDisplay from '$lib/assets/fonts/Playfair_Display/static/PlayfairD
 import OgImage from '$lib/components/metadata/OGImage.svelte';
 import { METADATA_IMAGE_DIMENSIONS } from '$lib/components/metadata/constants.js';
 import type { ImagePlatform } from '$lib/components/metadata/types.js';
-
-type OgImageComponent = {
-  render: (props: { title?: string; subtitle?: string }) => {
-    html: string;
-    css: { code: string };
-  };
-};
+import { render } from 'svelte/server';
 
 export const GET = async ({ url }) => {
   const { searchParams } = url;
@@ -20,11 +14,14 @@ export const GET = async ({ url }) => {
   const title = searchParams.get('title') ?? undefined;
   const subtitle = searchParams.get('subtitle') ?? undefined;
 
-  const result = (OgImage as unknown as OgImageComponent).render({
-    title,
-    subtitle
+  const result = render(OgImage, {
+    props: {
+      title,
+      subtitle
+    }
   });
-  const html = toReactNode(`${result.html}<style>${result.css.code}</style>`);
+
+  const html = toReactNode(`<head>${result.head}</head><body>${result.body}</body>`);
 
   // translate HTML to SVG
   const platform = (searchParams.get('platform') as ImagePlatform) ?? 'facebook';

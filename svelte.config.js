@@ -15,6 +15,10 @@ const config = {
   extensions: ['.svelte', '.svx'],
   // Consult https://kit.svelte.dev/docs/integrations#preprocessors
   preprocess: [vitePreprocess(), stripAnnouncer],
+  compilerOptions: {
+    // need css for generating dynamic social images
+    css: 'injected'
+  },
 
   kit: {
     // See https://kit.svelte.dev/docs/adapters for more information about adapters.
