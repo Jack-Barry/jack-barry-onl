@@ -83,7 +83,7 @@
     }, 2000);
   }
 
-  const highlighted = hljs.highlight(code, { language: lang }).value;
+  const highlighted = $derived(hljs.highlight(code, { language: lang }).value);
 </script>
 
 <section class="position-relative mb-3">
