@@ -28,7 +28,7 @@
     "@popperjs/core": "2.11.8",
     "@resvg/resvg-js": "2.6.2",
     "@sveltejs/adapter-vercel": "5.5.2",
-    "@sveltejs/kit": "2.15.1",
+    "@sveltejs/kit": "2.20.6",
     "@sveltejs/vite-plugin-svelte": "4.0.4",
     "@types/bootstrap": "5.2.10",
     "@types/mdast": "4.0.4",
