@@ -10,6 +10,13 @@ async function run() {
   await mkdir(indexDir, { recursive: true });
 
   const posts = await getPosts();
+  console.log(
+    `Found posts:\n${JSON.stringify(
+      posts.map((p) => p.uid),
+      null,
+      4
+    )}`
+  );
   await writeFile(resolve(indexDir, 'index.json'), JSON.stringify(posts), 'utf8');
 
   const latestPost = posts.sort(
