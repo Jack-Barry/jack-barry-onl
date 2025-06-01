@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "type": "module",
   "private": true,
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "build": "npm run compile-index && vite build",
     "build:e2e": "cross-env IS_TEST=true npm run build",
@@ -16,7 +19,7 @@
     "playwright:ui": "playwright test --ui",
     "preview": "vite preview",
     "svelte-check": "svelte-check --tsconfig ./tsconfig.json",
-    "test": "npm run test:integration && npm run test:unit",
+    "test": "npm run test:unit && npm run test:integration",
     "test:integration": "playwright test",
     "test:unit": "vitest run --passWithNoTests"
   },
